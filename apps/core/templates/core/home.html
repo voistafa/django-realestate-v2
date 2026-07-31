@@ -1,76 +1,29 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "base.html" %}
 
-    <title>سامانه املاک | صفحه اصلی</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+{% block title %}
+خانه رویایی شما | سامانه املاک
+{% endblock %}
 
-        body {
-            margin: 0;
-            font-family: Tahoma, Arial, sans-serif;
-            background: #f5f7fa;
-            color: #1f2937;
-        }
 
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-            text-align: center;
-            background: linear-gradient(135deg, #111827, #334155);
-            color: white;
-        }
+{% block meta_description %}
+مجموعه‌ای حرفه‌ای از املاک منتخب و پروژه‌های ساختمانی برای خرید، اجاره و سرمایه‌گذاری مطمئن
+{% endblock %}
 
-        .hero-content {
-            max-width: 760px;
-        }
 
-        .hero h1 {
-            margin: 0 0 20px;
-            font-size: clamp(38px, 7vw, 72px);
-        }
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <h1>خانه رویایی شما اینجاست</h1>
 
-        .hero p {
-            margin: 0 0 32px;
-            font-size: 20px;
-            line-height: 2;
-            color: #dbeafe;
-        }
+        <p>
+            مجموعه‌ای حرفه‌ای از املاک منتخب و پروژه‌های ساختمانی
+            برای خرید، اجاره و سرمایه‌گذاری مطمئن
+        </p>
 
-        .button {
-            display: inline-block;
-            padding: 14px 28px;
-            border-radius: 10px;
-            background: white;
-            color: #111827;
-            font-weight: bold;
-            text-decoration: none;
-        }
-    </style>
-</head>
-
-<body>
-    <main class="hero">
-        <div class="hero-content">
-            <h1>خانه رویایی شما اینجاست</h1>
-
-            <p>
-                مجموعه‌ای حرفه‌ای از املاک منتخب و پروژه‌های ساختمانی
-                برای خرید، اجاره و سرمایه‌گذاری مطمئن
-            </p>
-
-            <a class="button" href="/admin/">
-                ورود به پنل مدیریت
-            </a>
-        </div>
-    </main>
-</body>
-</html>
+        <a class="button" href="/admin/">
+            ورود به پنل مدیریت
+        </a>
+    </div>
+</section>
+{% endblock %}
