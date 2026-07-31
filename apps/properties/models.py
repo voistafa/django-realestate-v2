@@ -168,3 +168,32 @@ class Property(TimeStampedModel):
             self.published_at = timezone.now()
 
         self.save(update_fields=["status", "published_at", "updated_at"])
+
+
+class PropertyImage(TimeStampedModel):
+    property = models.ForeignKey(
+        Property,
+        on_delete=models.CASCADE,
+        related_name="images",
+    )
+    image = models.ImageField(
+        upload_to="properties/images/",
+    )
+    alt_text = models.CharField(max_length=200, blank=True)
+    is_cover = models.BooleanField(default=False)
+    display_order = models.PositiveSmallIntegerField(default=0)
+
+    class Meta:
+        ordering = ["display_order", "created_at"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["property"],
+                condition=models.Q(is_cover=True),
+                name="unique_cover_image_per_property",
+            ),
+        ]
+        verbose_name = "Property Image"
+        verbose_name_plural = "Property Images"
+
+    def __str__(self):
+        return f"Image for {self.property.reference_code}"
