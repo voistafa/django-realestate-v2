@@ -133,3 +133,31 @@ class DevelopmentProject(TimeStampedModel):
             self.published_at = timezone.now()
 
         self.save(update_fields=["published_at", "updated_at"])
+
+class ProjectImage(TimeStampedModel):
+    project = models.ForeignKey(
+        DevelopmentProject,
+        on_delete=models.CASCADE,
+        related_name="images",
+    )
+    image = models.ImageField(
+        upload_to="projects/images/",
+    )
+    alt_text = models.CharField(max_length=200, blank=True)
+    is_cover = models.BooleanField(default=False)
+    display_order = models.PositiveSmallIntegerField(default=0)
+
+    class Meta:
+        ordering = ["display_order", "created_at"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["project"],
+                condition=models.Q(is_cover=True),
+                name="unique_cover_image_per_project",
+            ),
+        ]
+        verbose_name = "Project Image"
+        verbose_name_plural = "Project Images"
+
+    def __str__(self):
+        return f"Image for {self.project.reference_code}"

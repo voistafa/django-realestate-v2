@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import DevelopmentProject, ProjectFeature
+from .models import DevelopmentProject, ProjectFeature, ProjectImage
 
 
 @admin.register(ProjectFeature)
@@ -14,6 +14,18 @@ class ProjectFeatureAdmin(admin.ModelAdmin):
     list_filter = ("is_active",)
     search_fields = ("name", "icon")
     ordering = ("display_order", "name")
+
+
+class ProjectImageInline(admin.TabularInline):
+    model = ProjectImage
+    extra = 1
+    fields = (
+        "image",
+        "alt_text",
+        "is_cover",
+        "display_order",
+    )
+    ordering = ("display_order",)
 
 
 @admin.register(DevelopmentProject)
@@ -61,3 +73,4 @@ class DevelopmentProjectAdmin(admin.ModelAdmin):
     )
     date_hierarchy = "published_at"
     ordering = ("-published_at", "-created_at")
+    inlines = (ProjectImageInline,)
