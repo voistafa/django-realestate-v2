@@ -4,16 +4,33 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <meta
         name="description"
-        content="{% block meta_description %}سامانه حرفه‌ای معرفی املاک و پروژه‌های ساختمانی{% endblock %}"
+        content="{% block meta_description %}کلارخانه؛ معرفی املاک، ویلاها و پروژه‌های ساختمانی منتخب در کلاردشت{% endblock %}"
     >
 
+    <meta name="theme-color" content="#176b32">
+
     <title>
-        {% block title %}سامانه املاک{% endblock %}
+        {% block title %}کلارخانه | املاک کلاردشت{% endblock %}
     </title>
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="{% static 'core/images/favicon.png' %}"
+    >
+
+    <link
+        rel="apple-touch-icon"
+        href="{% static 'core/images/favicon.png' %}"
+    >
 
     <link
         rel="stylesheet"
@@ -24,9 +41,7 @@
 </head>
 
 <body>
-    <header>
-        {% block header %}{% endblock %}
-    </header>
+    {% include "includes/header.html" %}
 
     <main>
         {% block content %}{% endblock %}

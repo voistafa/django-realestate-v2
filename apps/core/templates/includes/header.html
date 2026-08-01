@@ -1,0 +1,47 @@
+{% load static %}
+
+<header class="site-header">
+    <div class="container header-container">
+        <a
+            class="site-logo"
+            href="{% url 'core:home' %}"
+            aria-label="کلارخانه؛ صفحه اصلی"
+        >
+            <img
+                class="site-logo-image"
+                src="{% static 'core/images/logo.png' %}"
+                alt="لوگوی کلارخانه"
+            >
+        </a>
+
+        <nav class="main-navigation" aria-label="منوی اصلی">
+            <a href="{% url 'core:home' %}">
+                صفحه اصلی
+            </a>
+
+            <a href="#properties">
+                املاک
+            </a>
+
+            <a href="#projects">
+                پروژه‌ها
+            </a>
+
+            <a href="#agents">
+                مشاوران
+            </a>
+
+            <a href="#about">
+                درباره ما
+            </a>
+
+            <a href="#contact">
+                تماس با ما
+            </a>
+        </nav>
+
+        <a class="header-action" href="#contact">
+            درخواست مشاوره
+        </a>
+    </div>
+</header>
