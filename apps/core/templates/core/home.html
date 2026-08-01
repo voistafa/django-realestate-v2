@@ -2,27 +2,365 @@
 
 
 {% block title %}
-خانه رویایی شما | سامانه املاک
+کلارخانه | خرید، فروش و سرمایه‌گذاری ملکی در کلاردشت
 {% endblock %}
 
 
 {% block meta_description %}
-مجموعه‌ای حرفه‌ای از املاک منتخب و پروژه‌های ساختمانی برای خرید، اجاره و سرمایه‌گذاری مطمئن
+کلارخانه؛ معرفی املاک، ویلاها، زمین‌ها و پروژه‌های ساختمانی منتخب در روستاهای کلاردشت
 {% endblock %}
 
 
 {% block content %}
 <section class="hero">
-    <div class="hero-content">
-        <h1>خانه رویایی شما اینجاست</h1>
+    <div class="container hero-content">
+        <span class="hero-eyebrow">
+            خرید و فروش مطمئن ملک در کلاردشت
+        </span>
+
+        <h1>
+    ملک مناسب شما در
+    <span>کلاردشت</span>
+        </h1>
 
         <p>
-            مجموعه‌ای حرفه‌ای از املاک منتخب و پروژه‌های ساختمانی
-            برای خرید، اجاره و سرمایه‌گذاری مطمئن
+            ویلا، زمین و پروژه‌های منتخب روستاهای کلاردشت را
+            با اطلاعات شفاف، شناخت محلی و مشاوره تخصصی بررسی کنید.
         </p>
 
-        <a class="button" href="/admin/">
-            ورود به پنل مدیریت
+        <div class="hero-actions">
+            <a class="button" href="#properties">
+                مشاهده املاک ویژه
+            </a>
+
+            <a class="button button-secondary" href="#contact">
+                درخواست مشاوره
+            </a>
+        </div>
+
+        <div class="hero-highlights">
+            <span>پوشش روستاهای کلاردشت</span>
+            <span>فایل‌های بررسی‌شده</span>
+            <span>همراهی تا انتخاب نهایی</span>
+        </div>
+    </div>
+</section>
+
+
+<section class="section" id="properties">
+    <div class="container">
+        <div class="section-heading">
+            <div>
+                <span class="section-eyebrow">
+                    پیشنهادهای کلارخانه
+                </span>
+
+                <h2>
+                    املاک ویژه
+                </h2>
+            </div>
+
+            <p>
+                مجموعه‌ای از فایل‌های منتخب برای خرید، اجاره و سرمایه‌گذاری
+                در روستاهای کلاردشت
+            </p>
+        </div>
+
+        <div class="property-grid">
+            {% for property in featured_properties %}
+                <article class="property-card">
+                    <div class="property-card-media">
+                        {% if property.home_images %}
+                            <img
+                                src="{{ property.home_images.0.image.url }}"
+                                alt="{{ property.home_images.0.alt_text|default:property.title }}"
+                                loading="lazy"
+                            >
+                        {% else %}
+                            <div class="card-image-placeholder">
+                                تصویر ملک به‌زودی
+                            </div>
+                        {% endif %}
+
+                        <span class="property-badge">
+                            {% if property.listing_type == "sale" %}
+                                فروش
+                            {% else %}
+                                اجاره
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    <div class="property-card-content">
+                        <div class="property-location">
+                            {{ property.region.name }}،
+                            {{ property.region.city.name }}
+                        </div>
+
+                        <h3>
+                            {{ property.title }}
+                        </h3>
+
+                        {% if property.short_description %}
+                            <p>
+                                {{ property.short_description|truncatechars:105 }}
+                            </p>
+                        {% endif %}
+
+                        <div class="property-specifications">
+                            {% if property.building_area %}
+                                <span>
+                                    {{ property.building_area }} متر بنا
+                                </span>
+                            {% endif %}
+
+                            {% if property.land_area %}
+                                <span>
+                                    {{ property.land_area }} متر زمین
+                                </span>
+                            {% endif %}
+
+                            {% if property.bedrooms %}
+                                <span>
+                                    {{ property.bedrooms }} خواب
+                                </span>
+                            {% endif %}
+                        </div>
+
+                        <div class="property-card-footer">
+                            <strong class="property-price">
+                                {{ property.price }}
+
+                                {% if property.currency_code == "IRR" %}
+                                    ریال
+                                {% else %}
+                                    {{ property.currency_code }}
+                                {% endif %}
+                            </strong>
+
+                            <span class="property-reference">
+                                کد {{ property.reference_code }}
+                            </span>
+                        </div>
+                    </div>
+                </article>
+            {% empty %}
+                <div class="empty-state">
+                    هنوز ملک ویژه‌ای منتشر نشده است.
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+
+<section class="section section-muted" id="projects">
+    <div class="container">
+        <div class="section-heading">
+            <div>
+                <span class="section-eyebrow">
+                    فرصت‌های سرمایه‌گذاری
+                </span>
+
+                <h2>
+                    پروژه‌های منتخب
+                </h2>
+            </div>
+
+            <p>
+                پروژه‌های ساختمانی در حال برنامه‌ریزی، ساخت یا تکمیل
+                در مناطق مختلف کلاردشت
+            </p>
+        </div>
+
+        <div class="project-grid">
+            {% for project in featured_projects %}
+                <article class="project-card">
+                    <div class="project-card-media">
+                        {% if project.home_images %}
+                            <img
+                                src="{{ project.home_images.0.image.url }}"
+                                alt="{{ project.home_images.0.alt_text|default:project.title }}"
+                                loading="lazy"
+                            >
+                        {% else %}
+                            <div class="card-image-placeholder">
+                                تصویر پروژه به‌زودی
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="project-card-content">
+                        <div class="project-location">
+                            {{ project.region.name }}،
+                            {{ project.region.city.name }}
+                        </div>
+
+                        <h3>
+                            {{ project.title }}
+                        </h3>
+
+                        {% if project.short_description %}
+                            <p>
+                                {{ project.short_description|truncatechars:110 }}
+                            </p>
+                        {% endif %}
+
+                        <div class="project-progress">
+                            <div class="project-progress-heading">
+                                <span>پیشرفت پروژه</span>
+                                <strong>{{ project.completion_percentage }}٪</strong>
+                            </div>
+
+                            <div class="project-progress-track">
+                                <span
+                                    style="width: {{ project.completion_percentage }}%;"
+                                ></span>
+                            </div>
+                        </div>
+
+                        <div class="project-card-footer">
+                            {% if project.starting_price %}
+                                <strong>
+                                    شروع قیمت از {{ project.starting_price }}
+                                </strong>
+                            {% else %}
+                                <strong>
+                                    قیمت پس از مشاوره
+                                </strong>
+                            {% endif %}
+
+                            <span>
+                                کد {{ project.reference_code }}
+                            </span>
+                        </div>
+                    </div>
+                </article>
+            {% empty %}
+                <div class="empty-state">
+                    هنوز پروژه ویژه‌ای منتشر نشده است.
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+
+<section class="section" id="agents">
+    <div class="container">
+        <div class="section-heading">
+            <div>
+                <span class="section-eyebrow">
+                    همراه شما در یک انتخاب مطمئن
+                </span>
+
+                <h2>
+                    مشاوران منتخب
+                </h2>
+            </div>
+
+            <p>
+                مشاورانی آشنا با بازار املاک و روستاهای مختلف کلاردشت
+            </p>
+        </div>
+
+        <div class="agent-grid">
+            {% for agent in featured_agents %}
+                <article class="agent-card">
+                    <div class="agent-photo">
+                        {% if agent.photo %}
+                            <img
+                                src="{{ agent.photo.url }}"
+                                alt="{{ agent.full_name }}"
+                                loading="lazy"
+                            >
+                        {% else %}
+                            <div class="agent-photo-placeholder">
+                                {{ agent.full_name|first }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="agent-card-content">
+                        <h3>
+                            {{ agent.full_name }}
+                        </h3>
+
+                        {% if agent.job_title %}
+                            <span class="agent-job-title">
+                                {{ agent.job_title }}
+                            </span>
+                        {% endif %}
+
+                        {% if agent.bio %}
+                            <p>
+                                {{ agent.bio|truncatechars:100 }}
+                            </p>
+                        {% endif %}
+
+                        <div class="agent-meta">
+                            <span>
+                                {{ agent.experience_years }} سال تجربه
+                            </span>
+
+                            {% if agent.phone %}
+                                <a href="tel:{{ agent.phone }}">
+                                    تماس با مشاور
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </article>
+            {% empty %}
+                <div class="empty-state">
+                    هنوز مشاور منتخبی ثبت نشده است.
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+
+<section class="section about-section" id="about">
+    <div class="container about-content">
+        <div>
+            <span class="section-eyebrow">
+                درباره کلارخانه
+            </span>
+
+            <h2>
+                شناخت محلی، انتخاب مطمئن
+            </h2>
+        </div>
+
+        <p>
+            کلارخانه با تمرکز بر فایل‌های ملکی روستاهای کلاردشت،
+            اطلاعات منظم و قابل بررسی را برای خرید، فروش و سرمایه‌گذاری
+            در اختیار متقاضیان قرار می‌دهد.
+        </p>
+    </div>
+</section>
+
+
+<section class="contact-section" id="contact">
+    <div class="container contact-content">
+        <div>
+            <span class="section-eyebrow">
+                برای شروع آماده‌اید؟
+            </span>
+
+            <h2>
+                ملک مناسب شما را پیدا می‌کنیم
+            </h2>
+
+            <p>
+                نیاز، بودجه و منطقه موردنظر خود را با کارشناسان کلارخانه
+                در میان بگذارید.
+            </p>
+        </div>
+
+        <a class="button" href="tel:">
+            درخواست مشاوره
         </a>
     </div>
 </section>

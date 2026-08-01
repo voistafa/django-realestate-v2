@@ -1,8 +1,9 @@
+from django.db.models import Prefetch
 from django.shortcuts import render
 
 from apps.agents.models import Agent
-from apps.projects.models import DevelopmentProject
-from apps.properties.models import Property
+from apps.projects.models import DevelopmentProject, ProjectImage
+from apps.properties.models import Property, PropertyImage
 
 
 def home(request):
@@ -17,7 +18,17 @@ def home(request):
             "region__city",
             "agent",
         )
-        .prefetch_related("images")
+        .prefetch_related(
+            Prefetch(
+                "images",
+                queryset=PropertyImage.objects.order_by(
+                    "-is_cover",
+                    "display_order",
+                    "created_at",
+                ),
+                to_attr="home_images",
+            )
+        )
         [:6]
     )
 
@@ -31,7 +42,17 @@ def home(request):
             "region__city",
             "agent",
         )
-        .prefetch_related("images")
+        .prefetch_related(
+            Prefetch(
+                "images",
+                queryset=ProjectImage.objects.order_by(
+                    "-is_cover",
+                    "display_order",
+                    "created_at",
+                ),
+                to_attr="home_images",
+            )
+        )
         [:4]
     )
 
