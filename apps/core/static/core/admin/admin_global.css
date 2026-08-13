@@ -1,0 +1,261 @@
+@import url("https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap");
+
+/* Global Django admin typography */
+:root {
+    --admin-font-family:
+        "Vazirmatn",
+        Tahoma,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family: var(--admin-font-family) !important;
+    font-size: 16px !important;
+    line-height: 1.85 !important;
+}
+
+/* Form controls */
+button,
+input,
+select,
+textarea,
+.button,
+a.button,
+input[type="submit"],
+input[type="button"],
+.object-tools a {
+    font-family: var(--admin-font-family) !important;
+    font-size: 16px !important;
+    line-height: 1.7 !important;
+}
+
+input,
+select {
+    min-height: 38px;
+}
+
+textarea {
+    font-family: var(--admin-font-family) !important;
+    font-size: 16px !important;
+    line-height: 1.9 !important;
+}
+
+/* Labels and field texts */
+label,
+.form-row label,
+.flex-container label,
+.vCheckboxLabel {
+    font-family: var(--admin-font-family) !important;
+    font-size: 16px !important;
+    line-height: 1.8 !important;
+    font-weight: 500;
+}
+
+.help,
+.helptext,
+.form-row p.help {
+    font-family: var(--admin-font-family) !important;
+    font-size: 14px !important;
+    line-height: 1.9 !important;
+}
+
+.errorlist,
+.errornote,
+.messagelist {
+    font-family: var(--admin-font-family) !important;
+    font-size: 15px !important;
+    line-height: 1.8 !important;
+}
+
+/* Main headings */
+h1 {
+    font-family: var(--admin-font-family) !important;
+    font-size: 25px !important;
+    line-height: 1.6 !important;
+    font-weight: 700 !important;
+}
+
+h2 {
+    font-family: var(--admin-font-family) !important;
+    font-size: 20px !important;
+    line-height: 1.7 !important;
+    font-weight: 600 !important;
+}
+
+h3,
+h4 {
+    font-family: var(--admin-font-family) !important;
+    font-size: 18px !important;
+    line-height: 1.7 !important;
+    font-weight: 600 !important;
+}
+
+/* Header and navigation */
+#header,
+#branding,
+#user-tools,
+.breadcrumbs {
+    font-family: var(--admin-font-family) !important;
+}
+
+#branding h1,
+#branding h1 a,
+#site-name,
+#site-name a {
+    font-family: var(--admin-font-family) !important;
+    font-size: 22px !important;
+    font-weight: 700 !important;
+}
+
+#user-tools {
+    font-size: 14px !important;
+}
+
+.breadcrumbs {
+    font-size: 15px !important;
+    line-height: 1.8 !important;
+}
+
+/* Section headings */
+.module h2,
+.module caption,
+.inline-group h2,
+#nav-sidebar .module th,
+#nav-sidebar .module caption {
+    font-family: var(--admin-font-family) !important;
+    font-size: 17px !important;
+    line-height: 1.7 !important;
+    font-weight: 600 !important;
+}
+
+/* Sidebar */
+#nav-sidebar,
+#nav-sidebar a,
+#nav-sidebar th,
+#nav-sidebar td {
+    font-family: var(--admin-font-family) !important;
+    font-size: 15px !important;
+    line-height: 1.8 !important;
+}
+
+/* Tables */
+table,
+th,
+td,
+.paginator {
+    font-family: var(--admin-font-family) !important;
+}
+
+table th {
+    font-size: 15px !important;
+    line-height: 1.7 !important;
+    font-weight: 600 !important;
+}
+
+table td {
+    font-size: 15px !important;
+    line-height: 1.8 !important;
+}
+
+/* Buttons */
+.button,
+input[type="submit"],
+input[type="button"],
+.submit-row input,
+.object-tools a {
+    font-family: var(--admin-font-family) !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    padding-top: 9px !important;
+    padding-bottom: 9px !important;
+}
+
+/* Filter horizontal widgets */
+.selector,
+.selector select,
+.selector input,
+.selector h2,
+.selector-available,
+.selector-chosen {
+    font-family: var(--admin-font-family) !important;
+}
+
+.selector h2 {
+    font-size: 16px !important;
+}
+
+.selector select,
+.selector input {
+    font-size: 15px !important;
+}
+
+/* Selector action spacing fix */
+.selector .selector-chooseall,
+.selector .selector-clearall {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    min-height: 42px;
+    height: auto !important;
+
+    margin: 8px 0 0;
+    padding: 7px 10px !important;
+
+    box-sizing: border-box;
+
+    line-height: 1.8 !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    text-align: center;
+}
+
+.selector .selector-chooseall::before,
+.selector .selector-clearall::before {
+    flex: 0 0 auto;
+}
+
+.selector-available,
+.selector-chosen {
+    overflow: visible;
+    padding-bottom: 8px;
+}
+
+/* Unify admin select and option typography */
+select,
+select option,
+select optgroup {
+    font-family: var(--admin-font-family) !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    font-style: normal !important;
+    line-height: 1.8 !important;
+}
+
+select option {
+    padding: 8px 12px;
+}
+
+/* Region Select2 typography */
+.select2-container,
+.select2-container .select2-selection,
+.select2-container .select2-selection__rendered,
+.select2-dropdown,
+.select2-results__option,
+.select2-search__field {
+    font-family: var(--admin-font-family) !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+}
+
+.select2-results__option {
+    line-height: 1.9 !important;
+    padding: 8px 12px !important;
+}

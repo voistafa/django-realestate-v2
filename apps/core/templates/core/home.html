@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load humanize %}
 
 
 {% block title %}
@@ -19,8 +20,8 @@
         </span>
 
         <h1>
-    ملک مناسب شما در
-    <span>کلاردشت</span>
+            ملک مناسب شما در
+            <span>کلاردشت</span>
         </h1>
 
         <p>
@@ -33,7 +34,7 @@
                 مشاهده املاک ویژه
             </a>
 
-            <a class="button button-secondary" href="#contact">
+            <a class="button button-secondary" href="#agents">
                 درخواست مشاوره
             </a>
         </div>
@@ -83,11 +84,7 @@
                         {% endif %}
 
                         <span class="property-badge">
-                            {% if property.listing_type == "sale" %}
-                                فروش
-                            {% else %}
-                                اجاره
-                            {% endif %}
+                            {{ property.get_transaction_type_display }}
                         </span>
                     </div>
 
@@ -110,13 +107,13 @@
                         <div class="property-specifications">
                             {% if property.building_area %}
                                 <span>
-                                    {{ property.building_area }} متر بنا
+                                    {{ property.building_area|intcomma }} متر بنا
                                 </span>
                             {% endif %}
 
                             {% if property.land_area %}
                                 <span>
-                                    {{ property.land_area }} متر زمین
+                                    {{ property.land_area|intcomma }} متر زمین
                                 </span>
                             {% endif %}
 
@@ -129,12 +126,96 @@
 
                         <div class="property-card-footer">
                             <strong class="property-price">
-                                {{ property.price }}
+                                {% if property.price_on_request %}
+                                    تماس بگیرید
 
-                                {% if property.currency_code == "IRR" %}
-                                    ریال
+                                {% elif property.transaction_type == "sale" or property.transaction_type == "pre_sale" %}
+                                    {% if property.sale_price %}
+                                        {{ property.sale_price|intcomma }}
+
+                                        {% if property.currency_code == "IRT" %}
+                                            تومان
+                                        {% else %}
+                                            {{ property.get_currency_code_display }}
+                                        {% endif %}
+                                    {% else %}
+                                        قیمت ثبت نشده
+                                    {% endif %}
+
+                                {% elif property.transaction_type == "full_mortgage" %}
+                                    {% if property.deposit_amount %}
+                                        رهن کامل:
+                                        {{ property.deposit_amount|intcomma }}
+
+                                        {% if property.currency_code == "IRT" %}
+                                            تومان
+                                        {% else %}
+                                            {{ property.get_currency_code_display }}
+                                        {% endif %}
+                                    {% else %}
+                                        مبلغ رهن ثبت نشده
+                                    {% endif %}
+
+                                {% elif property.transaction_type == "mortgage_rent" %}
+                                    {% if property.deposit_amount %}
+                                        ودیعه:
+                                        {{ property.deposit_amount|intcomma }}
+
+                                        {% if property.currency_code == "IRT" %}
+                                            تومان
+                                        {% else %}
+                                            {{ property.get_currency_code_display }}
+                                        {% endif %}
+                                    {% endif %}
+
+                                    {% if property.deposit_amount and property.monthly_rent %}
+                                        <br>
+                                    {% endif %}
+
+                                    {% if property.monthly_rent %}
+                                        اجاره:
+                                        {{ property.monthly_rent|intcomma }}
+
+                                        {% if property.currency_code == "IRT" %}
+                                            تومان
+                                        {% else %}
+                                            {{ property.get_currency_code_display }}
+                                        {% endif %}
+                                    {% endif %}
+
+                                    {% if not property.deposit_amount and not property.monthly_rent %}
+                                        قیمت ثبت نشده
+                                    {% endif %}
+
+                                {% elif property.transaction_type == "rent" %}
+                                    {% if property.deposit_amount %}
+                                        ودیعه:
+                                        {{ property.deposit_amount|intcomma }}
+
+                                        {% if property.currency_code == "IRT" %}
+                                            تومان
+                                        {% else %}
+                                            {{ property.get_currency_code_display }}
+                                        {% endif %}
+
+                                        <br>
+                                    {% endif %}
+
+                                    {% if property.monthly_rent %}
+                                        اجاره ماهانه:
+                                        {{ property.monthly_rent|intcomma }}
+
+                                        {% if property.currency_code == "IRT" %}
+                                            تومان
+                                        {% else %}
+                                            {{ property.get_currency_code_display }}
+                                        {% endif %}
+                                    {% else %}
+                                        مبلغ اجاره ثبت نشده
+                                    {% endif %}
+
                                 {% else %}
-                                    {{ property.currency_code }}
+                                    قیمت ثبت نشده
                                 {% endif %}
                             </strong>
 
@@ -142,6 +223,13 @@
                                 کد {{ property.reference_code }}
                             </span>
                         </div>
+
+                        <a
+                            class="button button-secondary"
+                            href="{% url 'properties:detail' property.slug %}"
+                        >
+                            مشاهده جزئیات ملک
+                        </a>
                     </div>
                 </article>
             {% empty %}
@@ -150,6 +238,17 @@
                 </div>
             {% endfor %}
         </div>
+
+        {% if featured_properties %}
+            <div class="section-actions">
+                <a
+                    class="button button-secondary"
+                    href="{% url 'properties:list' %}"
+                >
+                    مشاهده همه املاک
+                </a>
+            </div>
+        {% endif %}
     </div>
 </section>
 
@@ -200,6 +299,10 @@
                             {{ project.title }}
                         </h3>
 
+                        <span class="project-status">
+                            {{ project.get_construction_status_display }}
+                        </span>
+
                         {% if project.short_description %}
                             <p>
                                 {{ project.short_description|truncatechars:110 }}
@@ -208,8 +311,13 @@
 
                         <div class="project-progress">
                             <div class="project-progress-heading">
-                                <span>پیشرفت پروژه</span>
-                                <strong>{{ project.completion_percentage }}٪</strong>
+                                <span>
+                                    پیشرفت پروژه
+                                </span>
+
+                                <strong>
+                                    {{ project.completion_percentage }}٪
+                                </strong>
                             </div>
 
                             <div class="project-progress-track">
@@ -220,13 +328,26 @@
                         </div>
 
                         <div class="project-card-footer">
-                            {% if project.starting_price %}
-                                <strong>
-                                    شروع قیمت از {{ project.starting_price }}
-                                </strong>
-                            {% else %}
+                            {% if project.price_on_request %}
                                 <strong>
                                     قیمت پس از مشاوره
+                                </strong>
+
+                            {% elif project.starting_price %}
+                                <strong>
+                                    شروع قیمت از
+                                    {{ project.starting_price|intcomma }}
+
+                                    {% if project.currency_code == "IRT" %}
+                                        تومان
+                                    {% else %}
+                                        {{ project.get_currency_code_display }}
+                                    {% endif %}
+                                </strong>
+
+                            {% else %}
+                                <strong>
+                                    قیمت ثبت نشده
                                 </strong>
                             {% endif %}
 
@@ -234,6 +355,13 @@
                                 کد {{ project.reference_code }}
                             </span>
                         </div>
+
+                        <a
+                            class="button button-secondary"
+                            href="{% url 'projects:detail' project.slug %}"
+                        >
+                            مشاهده جزئیات پروژه
+                        </a>
                     </div>
                 </article>
             {% empty %}
@@ -292,10 +420,20 @@
                             </span>
                         {% endif %}
 
-                        {% if agent.bio %}
+                        {% if agent.short_bio %}
+                            <p>
+                                {{ agent.short_bio|truncatechars:100 }}
+                            </p>
+                        {% elif agent.bio %}
                             <p>
                                 {{ agent.bio|truncatechars:100 }}
                             </p>
+                        {% endif %}
+
+                        {% if agent.specialties %}
+                            <div class="agent-specialties">
+                                {{ agent.specialties }}
+                            </div>
                         {% endif %}
 
                         <div class="agent-meta">
@@ -306,6 +444,16 @@
                             {% if agent.phone %}
                                 <a href="tel:{{ agent.phone }}">
                                     تماس با مشاور
+                                </a>
+                            {% endif %}
+
+                            {% if agent.rubika_url %}
+                                <a
+                                    href="{{ agent.rubika_url }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    ارتباط در روبیکا
                                 </a>
                             {% endif %}
                         </div>
@@ -359,8 +507,8 @@
             </p>
         </div>
 
-        <a class="button" href="tel:">
-            درخواست مشاوره
+        <a class="button" href="#agents">
+            ارتباط با مشاوران
         </a>
     </div>
 </section>

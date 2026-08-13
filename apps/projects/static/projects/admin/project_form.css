@@ -1,0 +1,57 @@
+/* Project admin form refinements */
+
+body.app-projects.model-developmentproject.change-form
+#id_short_description {
+    width: min(760px, 100%) !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+body.app-projects.model-developmentproject.change-form
+.form-row.field-is_exact_location_public
+.flex-container {
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+}
+
+body.app-projects.model-developmentproject.change-form
+.form-row.field-is_exact_location_public label,
+body.app-projects.model-developmentproject.change-form
+.form-row.field-is_exact_location_public
+.vCheckboxLabel {
+    width: auto !important;
+    max-width: none !important;
+    min-width: max-content !important;
+    white-space: nowrap !important;
+}
+
+/* project-error-message-fa */
+
+body.app-projects.model-developmentproject.change-form
+.errornote {
+    direction: rtl;
+    text-align: right;
+    font-size: 0;
+}
+
+body.app-projects.model-developmentproject.change-form
+.errornote::after {
+    content: "????? ?????? ???????? ?? ????? ????.";
+    font-size: 0.875rem;
+}
+
+
+/* project-error-message-fa-encoding-fixed */
+
+body.app-projects.model-developmentproject.change-form
+.errornote {
+    direction: rtl;
+    text-align: right;
+    font-size: 0;
+}
+
+body.app-projects.model-developmentproject.change-form
+.errornote::after {
+    content: "لطفاً خطاهای مشخص‌شده را اصلاح کنید.";
+    font-size: 0.875rem;
+}

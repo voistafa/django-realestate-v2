@@ -1,0 +1,176 @@
+/* Final project-admin UI refinements. */
+
+body.app-projects.model-developmentproject.change-form
+.form-row input:not([type="checkbox"]):not([type="radio"]),
+body.app-projects.model-developmentproject.change-form
+.form-row select,
+body.app-projects.model-developmentproject.change-form
+.form-row textarea,
+body.app-projects.model-developmentproject.change-form
+.form-row button,
+body.app-projects.model-developmentproject.change-form
+.form-row option,
+body.app-projects.model-developmentproject.change-form
+.selector,
+body.app-projects.model-developmentproject.change-form
+.selector * {
+    font-family:
+        "Vazirmatn",
+        Tahoma,
+        "Segoe UI",
+        Arial,
+        sans-serif !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    line-height: 1.75 !important;
+}
+
+body.app-projects.model-developmentproject.change-form
+.form-row input:not([type="checkbox"]):not([type="radio"]),
+body.app-projects.model-developmentproject.change-form
+.form-row select {
+    min-height: 42px !important;
+    box-sizing: border-box !important;
+}
+
+body.app-projects.model-developmentproject.change-form
+.form-row textarea {
+    line-height: 1.95 !important;
+}
+
+body.app-projects.model-developmentproject.change-form
+.form-row.field-published_at .datetime {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    gap: 10px !important;
+}
+
+body.app-projects.model-developmentproject.change-form
+#id_published_at_0,
+body.app-projects.model-developmentproject.change-form
+.project-jalali-date-input {
+    width: 170px !important;
+    min-width: 170px !important;
+    text-align: center !important;
+}
+
+body.app-projects.model-developmentproject.change-form
+#id_published_at_1,
+body.app-projects.model-developmentproject.change-form
+.project-time-input {
+    width: 132px !important;
+    min-width: 132px !important;
+    min-height: 42px !important;
+    padding: 7px 12px !important;
+    border-radius: 4px !important;
+    direction: ltr !important;
+    text-align: center !important;
+    letter-spacing: 0.4px !important;
+    font-variant-numeric: tabular-nums !important;
+    appearance: none !important;
+    -moz-appearance: textfield !important;
+}
+
+body.app-projects.model-developmentproject.change-form
+#id_published_at_1::placeholder,
+body.app-projects.model-developmentproject.change-form
+.project-time-input::placeholder {
+    opacity: 0.68 !important;
+    font-family:
+        "Vazirmatn",
+        Tahoma,
+        sans-serif !important;
+}
+
+body.app-projects.model-developmentproject.change-form
+.form-row.field-published_at .datetimeshortcuts,
+body.app-projects.model-developmentproject.change-form
+[id^="clockbox"] {
+    display: none !important;
+}
+
+body.app-projects.model-developmentproject.change-form
+.selector-available > p,
+body.app-projects.model-developmentproject.change-form
+.selector-chosen > p {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    min-height: 48px !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+}
+
+body.app-projects.model-developmentproject.change-form
+.selector .selector-chooseall,
+body.app-projects.model-developmentproject.change-form
+.selector .selector-clearall {
+    position: static !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    min-height: 42px !important;
+    height: auto !important;
+    margin: 6px 0 0 !important;
+    padding: 7px 10px !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+    white-space: nowrap !important;
+    text-align: center !important;
+    text-indent: 0 !important;
+    background-image: none !important;
+}
+
+body.app-projects.model-developmentproject.change-form
+.selector .selector-chooseall::before,
+body.app-projects.model-developmentproject.change-form
+.selector .selector-chooseall::after,
+body.app-projects.model-developmentproject.change-form
+.selector .selector-clearall::before,
+body.app-projects.model-developmentproject.change-form
+.selector .selector-clearall::after {
+    display: none !important;
+    content: none !important;
+}
+
+body.app-projects.model-developmentproject.change-form
+.form-row.field-price_on_request .flex-container {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
+}
+
+body.app-projects.model-developmentproject.change-form
+.form-row.field-price_on_request label,
+body.app-projects.model-developmentproject.change-form
+.form-row.field-price_on_request .vCheckboxLabel {
+    width: auto !important;
+    max-width: none !important;
+    white-space: nowrap !important;
+}
+
+.jdp-container,
+.jdp-container *,
+.jdp-wrapper,
+.jdp-wrapper *,
+[data-jdp-container],
+[data-jdp-container] *,
+[class*="jdp-container"],
+[class*="jdp-container"] *,
+[class*="jalali-datepicker"],
+[class*="jalali-datepicker"] * {
+    font-family:
+        "Vazirmatn",
+        Tahoma,
+        "Segoe UI",
+        Arial,
+        sans-serif !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+}

@@ -1,47 +1,78 @@
 {% load static %}
 
+
 <header class="site-header">
     <div class="container header-container">
+
         <a
             class="site-logo"
             href="{% url 'core:home' %}"
-            aria-label="کلارخانه؛ صفحه اصلی"
+            aria-label="کلارخانه؛ رفتن به صفحه اصلی"
         >
             <img
                 class="site-logo-image"
                 src="{% static 'core/images/logo.png' %}"
                 alt="لوگوی کلارخانه"
+                width="190"
+                height="64"
             >
         </a>
 
-        <nav class="main-navigation" aria-label="منوی اصلی">
-            <a href="{% url 'core:home' %}">
+
+        <nav
+            class="main-navigation"
+            aria-label="منوی اصلی سایت"
+        >
+            <a
+                href="{% url 'core:home' %}"
+                data-nav="home"
+            >
                 صفحه اصلی
             </a>
 
-            <a href="#properties">
+            <a
+                href="{% url 'properties:list' %}"
+                data-nav="properties"
+            >
                 املاک
             </a>
 
-            <a href="#projects">
+            <a
+                href="{% url 'projects:list' %}"
+                data-nav="projects"
+            >
                 پروژه‌ها
             </a>
 
-            <a href="#agents">
+            <a
+                href="{% url 'core:home' %}#agents"
+                data-nav="agents"
+            >
                 مشاوران
             </a>
 
-            <a href="#about">
+            <a
+                href="{% url 'core:home' %}#about"
+                data-nav="about"
+            >
                 درباره ما
             </a>
 
-            <a href="#contact">
+            <a
+                href="{% url 'core:home' %}#contact"
+                data-nav="contact"
+            >
                 تماس با ما
             </a>
         </nav>
 
-        <a class="header-action" href="#contact">
+
+        <a
+            class="header-action"
+            href="{% url 'core:home' %}#contact"
+        >
             درخواست مشاوره
         </a>
+
     </div>
 </header>

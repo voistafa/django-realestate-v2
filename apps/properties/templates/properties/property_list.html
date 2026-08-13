@@ -1,0 +1,995 @@
+{% extends "base.html" %}
+{% load static humanize %}
+
+
+{% block title %}
+    فهرست املاک کلاردشت | کلارخانه
+{% endblock %}
+
+
+{% block meta_description %}
+    جست‌وجو و مشاهده ویلا، زمین و املاک منتخب برای خرید، فروش، رهن و اجاره در مناطق مختلف کلاردشت
+{% endblock %}
+
+
+{% block extra_css %}
+    <link
+        rel="stylesheet"
+        href="{% static 'properties/css/property-list.css' %}"
+    >
+{% endblock %}
+
+
+{% block content %}
+
+    <section class="property-list-hero">
+        <div class="container property-list-hero__layout">
+
+            <div class="property-list-hero__copy">
+
+                <span class="property-list-hero__eyebrow">
+                    فایل‌های منتخب کلاردشت
+                </span>
+
+                <h1>
+                    جست‌وجوی ملک مناسب شما
+                </h1>
+
+                <p class="property-list-hero__description">
+                    <span>
+                        ویلا، زمین و املاک منتشرشده در مناطق مختلف کلاردشت را
+                    </span>
+
+                    <span>
+                        با اطلاعات شفاف جست‌وجو، مقایسه و بررسی کنید.
+                    </span>
+                </p>
+
+            </div>
+
+
+            <aside
+                class="property-list-hero__showcase"
+                aria-label="مزایای کلارخانه"
+            >
+
+                <div class="property-list-hero__showcase-heading">
+                    <h2>
+                        چرا کلارخانه؟
+                    </h2>
+                </div>
+
+
+                <div class="property-list-hero__features">
+
+                    <article class="property-list-hero__feature">
+
+                        <span class="property-list-hero__feature-number">
+                            ۱
+                        </span>
+
+                        <div>
+                            <strong>
+                                فیلتر دقیق
+                            </strong>
+
+                            <p>
+                                جست‌وجو براساس منطقه، قیمت، نوع ملک و نوع معامله
+                            </p>
+                        </div>
+
+                    </article>
+
+
+                    <article class="property-list-hero__feature">
+
+                        <span class="property-list-hero__feature-number">
+                            ۲
+                        </span>
+
+                        <div>
+                            <strong>
+                                اطلاعات شفاف
+                            </strong>
+
+                            <p>
+                                نمایش مشخصات اصلی و کد اختصاصی هر فایل
+                            </p>
+                        </div>
+
+                    </article>
+
+
+                    <article class="property-list-hero__feature">
+
+                        <span class="property-list-hero__feature-number">
+                            ۳
+                        </span>
+
+                        <div>
+                            <strong>
+                                شناخت محلی
+                            </strong>
+
+                            <p>
+                                تمرکز تخصصی بر روستاها و مناطق کلاردشت
+                            </p>
+                        </div>
+
+                    </article>
+
+                </div>
+
+            </aside>
+
+        </div>
+    </section>
+
+
+    <section class="property-list-section">
+        <div class="container property-list-layout">
+
+            <aside class="property-filter-panel">
+
+                <div class="property-filter-panel__heading">
+
+                    <div>
+                        <span>
+                            جست‌وجوی دقیق
+                        </span>
+
+                        <h2>
+                            فیلتر املاک
+                        </h2>
+                    </div>
+
+
+                    {% if request.GET %}
+                        <a href="{% url 'properties:list' %}">
+                            پاک‌کردن فیلترها
+                        </a>
+                    {% endif %}
+
+                </div>
+
+
+                <form
+                    class="property-filter-form"
+                    method="get"
+                    action="{% url 'properties:list' %}"
+                >
+
+                    <div class="property-filter-field">
+
+                        <label for="property-search">
+                            جست‌وجو
+                        </label>
+
+                        <input
+                            id="property-search"
+                            type="search"
+                            name="q"
+                            value="{{ selected_filters.q }}"
+                            placeholder="کد، عنوان یا موقعیت عمومی ملک"
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+
+                    <div class="property-filter-field">
+
+                        <label for="transaction-type">
+                            نوع معامله
+                        </label>
+
+                        <select
+                            id="transaction-type"
+                            class="js-custom-select"
+                            name="transaction_type"
+                        >
+                            <option value="">
+                                همه معاملات
+                            </option>
+
+                            {% for value, label in transaction_types %}
+
+                                <option
+                                    value="{{ value }}"
+                                    {% if selected_filters.transaction_type == value %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    {{ label }}
+                                </option>
+
+                            {% endfor %}
+                        </select>
+
+                    </div>
+
+
+                    <div class="property-filter-field">
+
+                        <label for="property-type">
+                            نوع ملک
+                        </label>
+
+                        <select
+                            id="property-type"
+                            class="js-custom-select"
+                            name="property_type"
+                        >
+                            <option value="">
+                                همه انواع
+                            </option>
+
+                            {% for item in property_types %}
+
+                                <option
+                                    value="{{ item.id }}"
+                                    {% if item.id|stringformat:"s" == selected_filters.property_type %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    {{ item.name }}
+                                </option>
+
+                            {% endfor %}
+                        </select>
+
+                    </div>
+
+
+                    <div class="property-filter-field">
+
+                        <label for="property-region">
+                            منطقه
+                        </label>
+
+                        <select
+                            id="property-region"
+                            class="js-custom-select"
+                            name="region"
+                        >
+                            <option value="">
+                                همه مناطق
+                            </option>
+
+                            {% for region in regions %}
+
+                                <option
+                                    value="{{ region.id }}"
+                                    {% if region.id|stringformat:"s" == selected_filters.region %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    {{ region.name }}
+                                </option>
+
+                            {% endfor %}
+                        </select>
+
+                    </div>
+
+
+                    <div class="property-filter-field">
+
+                        <label for="property-bedrooms">
+                            تعداد اتاق‌ها
+                        </label>
+
+                        <select
+                            id="property-bedrooms"
+                            class="js-custom-select"
+                            name="bedrooms"
+                        >
+                            <option value="">
+                                مهم نیست
+                            </option>
+
+                            <option
+                                value="1"
+                                {% if selected_filters.bedrooms == "1" %}
+                                    selected
+                                {% endif %}
+                            >
+                                ۱ اتاق
+                            </option>
+
+                            <option
+                                value="2"
+                                {% if selected_filters.bedrooms == "2" %}
+                                    selected
+                                {% endif %}
+                            >
+                                ۲ اتاق
+                            </option>
+
+                            <option
+                                value="3"
+                                {% if selected_filters.bedrooms == "3" %}
+                                    selected
+                                {% endif %}
+                            >
+                                ۳ اتاق
+                            </option>
+
+                            <option
+                                value="4"
+                                {% if selected_filters.bedrooms == "4" %}
+                                    selected
+                                {% endif %}
+                            >
+                                ۴ اتاق یا بیشتر
+                            </option>
+                        </select>
+
+                    </div>
+
+
+                    <div class="property-filter-field">
+
+                        <label for="minimum-price">
+                            حداقل قیمت یا اجاره
+                        </label>
+
+                        <input
+                            id="minimum-price"
+                            class="js-price-input"
+                            type="text"
+                            name="min_price"
+                            value="{{ selected_filters.min_price }}"
+                            placeholder="مثلاً 5,000,000,000"
+                            inputmode="numeric"
+                            autocomplete="off"
+                        >
+
+                        <small>
+                            برای فروش: قیمت کل؛ برای اجاره: اجاره ماهانه؛
+                            برای رهن کامل: مبلغ رهن
+                        </small>
+
+                    </div>
+
+
+                    <div class="property-filter-field">
+
+                        <label for="maximum-price">
+                            حداکثر قیمت یا اجاره
+                        </label>
+
+                        <input
+                            id="maximum-price"
+                            class="js-price-input"
+                            type="text"
+                            name="max_price"
+                            value="{{ selected_filters.max_price }}"
+                            placeholder="مثلاً 50,000,000,000"
+                            inputmode="numeric"
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+
+                    <div class="property-filter-field">
+
+                        <label for="minimum-deposit">
+                            حداقل مبلغ ودیعه
+                        </label>
+
+                        <input
+                            id="minimum-deposit"
+                            class="js-price-input"
+                            type="text"
+                            name="min_deposit"
+                            value="{{ selected_filters.min_deposit }}"
+                            placeholder="مثلاً 500,000,000"
+                            inputmode="numeric"
+                            autocomplete="off"
+                        >
+
+                        <small>
+                            مخصوص فایل‌های اجاره و رهن و اجاره
+                        </small>
+
+                    </div>
+
+
+                    <div class="property-filter-field">
+
+                        <label for="maximum-deposit">
+                            حداکثر مبلغ ودیعه
+                        </label>
+
+                        <input
+                            id="maximum-deposit"
+                            class="js-price-input"
+                            type="text"
+                            name="max_deposit"
+                            value="{{ selected_filters.max_deposit }}"
+                            placeholder="مثلاً 2,000,000,000"
+                            inputmode="numeric"
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+
+                    <div class="property-filter-field">
+
+                        <label for="property-ordering">
+                            مرتب‌سازی
+                        </label>
+
+                        <select
+                            id="property-ordering"
+                            class="js-custom-select"
+                            name="ordering"
+                        >
+                            <option
+                                value="newest"
+                                {% if selected_filters.ordering == "newest" %}
+                                    selected
+                                {% endif %}
+                            >
+                                جدیدترین فایل‌ها
+                            </option>
+
+                            <option
+                                value="oldest"
+                                {% if selected_filters.ordering == "oldest" %}
+                                    selected
+                                {% endif %}
+                            >
+                                قدیمی‌ترین فایل‌ها
+                            </option>
+
+                            <option
+                                value="price_asc"
+                                {% if selected_filters.ordering == "price_asc" %}
+                                    selected
+                                {% endif %}
+                            >
+                                کمترین قیمت
+                            </option>
+
+                            <option
+                                value="price_desc"
+                                {% if selected_filters.ordering == "price_desc" %}
+                                    selected
+                                {% endif %}
+                            >
+                                بیشترین قیمت
+                            </option>
+
+                            <option
+                                value="area_desc"
+                                {% if selected_filters.ordering == "area_desc" %}
+                                    selected
+                                {% endif %}
+                            >
+                                بیشترین متراژ
+                            </option>
+                        </select>
+
+                    </div>
+
+
+                    <button
+                        class="button property-filter-submit"
+                        type="submit"
+                    >
+                        نمایش نتایج
+                    </button>
+
+                </form>
+
+            </aside>
+
+
+            <div class="property-results">
+
+                <div class="property-results__heading">
+
+                    <div>
+                        <span class="section-eyebrow">
+                            نتایج جست‌وجو
+                        </span>
+
+                        <h2>
+                            املاک منتشرشده
+                        </h2>
+                    </div>
+
+
+                    <p>
+                        {{ page_obj.paginator.count|intcomma }}
+                        فایل مطابق جست‌وجوی شما پیدا شد.
+                    </p>
+
+                </div>
+
+
+                {% if properties %}
+
+                    <div class="property-list-grid">
+
+                        {% for property in properties %}
+
+                            <a
+                                class="property-list-card"
+                                href="{% url 'properties:detail' property.slug %}"
+                                aria-label="مشاهده جزئیات {{ property.title }}"
+                            >
+
+                                <div class="property-list-card__media">
+
+                                    {% if property.list_images %}
+
+                                        <img
+                                            src="{{ property.list_images.0.image.url }}"
+                                            alt="{{ property.list_images.0.alt_text|default:property.title }}"
+                                            loading="lazy"
+                                            decoding="async"
+                                        >
+
+                                    {% else %}
+
+                                        <div class="property-list-card__placeholder">
+
+                                            <span>
+                                                کلارخانه
+                                            </span>
+
+                                            <small>
+                                                تصویر ملک ثبت نشده است
+                                            </small>
+
+                                        </div>
+
+                                    {% endif %}
+
+
+                                    <span class="property-list-card__badge">
+                                        {{ property.get_transaction_type_display }}
+                                    </span>
+
+
+                                    {% if property.is_featured %}
+
+                                        <span class="property-list-card__featured">
+                                            ویژه
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <div class="property-list-card__content">
+
+                                    <div class="property-list-card__location">
+
+                                        <span>
+                                            {{ property.region.name }}
+                                        </span>
+
+                                        <span>
+                                            {{ property.property_type.name }}
+                                        </span>
+
+                                    </div>
+
+
+                                    <h3>
+                                        {{ property.title }}
+                                    </h3>
+
+
+                                    {% if property.public_location %}
+
+                                        <p class="property-list-card__description">
+                                            {{ property.public_location }}
+                                        </p>
+
+                                    {% elif property.short_description %}
+
+                                        <p class="property-list-card__description">
+                                            {{ property.short_description|truncatechars:125 }}
+                                        </p>
+
+                                    {% endif %}
+
+
+                                    <div class="property-list-card__specifications">
+
+                                        {% if property.land_area %}
+
+                                            <span>
+                                                زمین:
+                                                {{ property.land_area|intcomma }}
+                                                متر
+                                            </span>
+
+                                        {% endif %}
+
+
+                                        {% if property.building_area %}
+
+                                            <span>
+                                                بنا:
+                                                {{ property.building_area|intcomma }}
+                                                متر
+                                            </span>
+
+                                        {% endif %}
+
+
+                                        {% if property.bedrooms %}
+
+                                            <span>
+                                                {{ property.bedrooms|intcomma }}
+                                                خواب
+                                            </span>
+
+                                        {% endif %}
+
+
+                                        {% if property.bathrooms %}
+
+                                            <span>
+                                                {{ property.bathrooms|intcomma }}
+                                                سرویس
+                                            </span>
+
+                                        {% endif %}
+
+
+                                        {% if property.parking_spaces %}
+
+                                            <span>
+                                                {{ property.parking_spaces|intcomma }}
+                                                پارکینگ
+                                            </span>
+
+                                        {% endif %}
+
+
+                                        {% if property.deed_type != "unknown" %}
+
+                                            <span>
+                                                {{ property.get_deed_type_display }}
+                                            </span>
+
+                                        {% endif %}
+
+                                    </div>
+
+
+                                    <div class="property-list-card__footer">
+
+                                        <div class="property-list-card__price">
+
+                                            <small>
+                                                {% if property.price_on_request %}
+                                                    قیمت ملک
+
+                                                {% elif property.transaction_type == "sale" %}
+                                                    قیمت فروش
+
+                                                {% elif property.transaction_type == "pre_sale" %}
+                                                    قیمت پیش‌فروش
+
+                                                {% elif property.transaction_type == "full_mortgage" %}
+                                                    مبلغ رهن کامل
+
+                                                {% elif property.transaction_type == "mortgage_rent" %}
+                                                    ودیعه و اجاره
+
+                                                {% elif property.transaction_type == "rent" %}
+                                                    ودیعه و اجاره
+
+                                                {% else %}
+                                                    قیمت ملک
+                                                {% endif %}
+                                            </small>
+
+
+                                            <strong>
+
+                                                {% if property.price_on_request %}
+
+                                                    تماس بگیرید
+
+
+                                                {% elif property.transaction_type == "sale" or property.transaction_type == "pre_sale" %}
+
+                                                    {% if property.sale_price %}
+
+                                                        {{ property.sale_price|intcomma }}
+
+                                                        {% if property.currency_code == "IRT" %}
+                                                            تومان
+                                                        {% elif property.currency_code == "USD" %}
+                                                            دلار
+                                                        {% elif property.currency_code == "EUR" %}
+                                                            یورو
+                                                        {% elif property.currency_code == "AED" %}
+                                                            درهم
+                                                        {% else %}
+                                                            {{ property.currency_code }}
+                                                        {% endif %}
+
+                                                    {% else %}
+
+                                                        قیمت ثبت نشده
+
+                                                    {% endif %}
+
+
+                                                {% elif property.transaction_type == "full_mortgage" %}
+
+                                                    {% if property.deposit_amount %}
+
+                                                        {{ property.deposit_amount|intcomma }}
+
+                                                        {% if property.currency_code == "IRT" %}
+                                                            تومان
+                                                        {% elif property.currency_code == "USD" %}
+                                                            دلار
+                                                        {% elif property.currency_code == "EUR" %}
+                                                            یورو
+                                                        {% elif property.currency_code == "AED" %}
+                                                            درهم
+                                                        {% else %}
+                                                            {{ property.currency_code }}
+                                                        {% endif %}
+
+                                                    {% else %}
+
+                                                        مبلغ رهن ثبت نشده
+
+                                                    {% endif %}
+
+
+                                                {% elif property.transaction_type == "mortgage_rent" %}
+
+                                                    {% if property.deposit_amount %}
+
+                                                        ودیعه:
+                                                        {{ property.deposit_amount|intcomma }}
+
+                                                        {% if property.currency_code == "IRT" %}
+                                                            تومان
+                                                        {% elif property.currency_code == "USD" %}
+                                                            دلار
+                                                        {% elif property.currency_code == "EUR" %}
+                                                            یورو
+                                                        {% elif property.currency_code == "AED" %}
+                                                            درهم
+                                                        {% else %}
+                                                            {{ property.currency_code }}
+                                                        {% endif %}
+
+                                                    {% endif %}
+
+
+                                                    {% if property.deposit_amount and property.monthly_rent %}
+                                                        <br>
+                                                    {% endif %}
+
+
+                                                    {% if property.monthly_rent %}
+
+                                                        اجاره:
+                                                        {{ property.monthly_rent|intcomma }}
+
+                                                        {% if property.currency_code == "IRT" %}
+                                                            تومان
+                                                        {% elif property.currency_code == "USD" %}
+                                                            دلار
+                                                        {% elif property.currency_code == "EUR" %}
+                                                            یورو
+                                                        {% elif property.currency_code == "AED" %}
+                                                            درهم
+                                                        {% else %}
+                                                            {{ property.currency_code }}
+                                                        {% endif %}
+
+                                                    {% endif %}
+
+
+                                                    {% if not property.deposit_amount and not property.monthly_rent %}
+
+                                                        قیمت ثبت نشده
+
+                                                    {% endif %}
+
+
+                                                {% elif property.transaction_type == "rent" %}
+
+                                                    {% if property.deposit_amount %}
+
+                                                        ودیعه:
+                                                        {{ property.deposit_amount|intcomma }}
+
+                                                        {% if property.currency_code == "IRT" %}
+                                                            تومان
+                                                        {% elif property.currency_code == "USD" %}
+                                                            دلار
+                                                        {% elif property.currency_code == "EUR" %}
+                                                            یورو
+                                                        {% elif property.currency_code == "AED" %}
+                                                            درهم
+                                                        {% else %}
+                                                            {{ property.currency_code }}
+                                                        {% endif %}
+
+                                                    {% endif %}
+
+
+                                                    {% if property.deposit_amount and property.monthly_rent %}
+                                                        <br>
+                                                    {% endif %}
+
+
+                                                    {% if property.monthly_rent %}
+
+                                                        اجاره:
+                                                        {{ property.monthly_rent|intcomma }}
+
+                                                        {% if property.currency_code == "IRT" %}
+                                                            تومان
+                                                        {% elif property.currency_code == "USD" %}
+                                                            دلار
+                                                        {% elif property.currency_code == "EUR" %}
+                                                            یورو
+                                                        {% elif property.currency_code == "AED" %}
+                                                            درهم
+                                                        {% else %}
+                                                            {{ property.currency_code }}
+                                                        {% endif %}
+
+                                                    {% endif %}
+
+
+                                                    {% if not property.deposit_amount and not property.monthly_rent %}
+
+                                                        قیمت ثبت نشده
+
+                                                    {% endif %}
+
+
+                                                {% else %}
+
+                                                    قیمت ثبت نشده
+
+                                                {% endif %}
+
+                                            </strong>
+
+                                        </div>
+
+
+                                        <span class="property-list-card__reference">
+                                            کد:
+                                            {{ property.reference_code }}
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </a>
+
+                        {% endfor %}
+
+                    </div>
+
+
+                    {% if page_obj.paginator.num_pages > 1 %}
+
+                        <nav
+                            class="property-pagination"
+                            aria-label="صفحه‌بندی املاک"
+                        >
+
+                            {% if page_obj.has_previous %}
+
+                                <a
+                                    href="?{% if query_string %}{{ query_string }}&{% endif %}page={{ page_obj.previous_page_number }}"
+                                    rel="prev"
+                                >
+                                    صفحه قبل
+                                </a>
+
+                            {% endif %}
+
+
+                            <span class="property-pagination__status">
+                                صفحه
+                                {{ page_obj.number|intcomma }}
+                                از
+                                {{ page_obj.paginator.num_pages|intcomma }}
+                            </span>
+
+
+                            {% if page_obj.has_next %}
+
+                                <a
+                                    href="?{% if query_string %}{{ query_string }}&{% endif %}page={{ page_obj.next_page_number }}"
+                                    rel="next"
+                                >
+                                    صفحه بعد
+                                </a>
+
+                            {% endif %}
+
+                        </nav>
+
+                    {% endif %}
+
+
+                {% else %}
+
+                    <div class="property-results-empty">
+
+                        <div class="property-results-empty__icon">
+                            ملک
+                        </div>
+
+                        <h3>
+                            ملکی مطابق فیلترهای شما پیدا نشد
+                        </h3>
+
+                        <p>
+                            محدوده قیمت یا سایر فیلترها را تغییر دهید
+                            و دوباره جست‌وجو کنید.
+                        </p>
+
+                        <a
+                            class="button"
+                            href="{% url 'properties:list' %}"
+                        >
+                            مشاهده همه املاک
+                        </a>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}
+
+
+{% block footer %}
+
+    <div class="container property-page-footer">
+
+        <strong>
+            کلارخانه
+        </strong>
+
+        <p>
+            معرفی املاک و پروژه‌های منتخب در روستاهای کلاردشت
+        </p>
+
+    </div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+    <script
+        src="{% static 'properties/js/property-list.js' %}"
+        defer
+    ></script>
+
+{% endblock %}

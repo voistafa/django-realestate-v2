@@ -216,3 +216,19 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Project local/runtime files
+media/
+backups/
+*.zip
+
+# Temporary command outputs
+makemigrations-output.txt
+migrate-output.txt
+
+# Temporary repair scripts
+apply_project_admin_fixes.py
+fix_project_features_widget.py
+fix_project_selector_final.py
+patch_project_selector_observer.py
+repair_project_admin_ui_v2.py

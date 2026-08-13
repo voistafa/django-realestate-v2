@@ -1,0 +1,1460 @@
+{% extends "admin/change_form.html" %}
+
+{% block extrahead %}
+    {{ block.super }}
+
+    <script>
+        (function () {
+            "use strict";
+
+            const originalGettext = window.gettext;
+
+            window.gettext = function (message) {
+                if (message === "Available %s") {
+                    return "%s موجود";
+                }
+
+                return originalGettext.apply(
+                    this,
+                    arguments
+                );
+            };
+        }());
+    </script>
+
+    <style>
+        /*
+         * جلوگیری از دوخطی‌شدن عنوان
+         * «امکانات پروژه انتخاب شده»
+         */
+        #content-main
+        .selector-chosen-title
+        > label[for="id_features_to"] {
+            display: block !important;
+            float: none !important;
+
+            width: 100% !important;
+            min-width: max-content !important;
+            max-width: none !important;
+
+            margin: 0 !important;
+            padding: 0 !important;
+
+            white-space: nowrap !important;
+            word-break: normal !important;
+            overflow-wrap: normal !important;
+
+            box-sizing: border-box !important;
+        }
+
+        /*
+         * هم‌ترازی عمودی برچسب‌های فرم
+         */
+        #content-main label:is(
+            [for="id_reference_code"],
+            [for="id_title"],
+            [for="id_slug"],
+
+            [for="id_construction_status"],
+            [for="id_publication_status"],
+            [for="id_completion_percentage"],
+            [for="id_is_featured"],
+            [for="id_published_at_0"],
+
+            [for="id_short_description"],
+            [for="id_description"],
+
+            [for="id_public_location"],
+            [for="id_latitude"],
+            [for="id_longitude"],
+            [for="id_is_exact_location_public"],
+
+            [for="id_starting_price"],
+            [for="id_currency_code"],
+            [for="id_price_on_request"],
+
+            [for="id_total_units"],
+            [for="id_available_units"],
+            [for="id_start_date"],
+            [for="id_expected_completion_date"]
+        ) {
+            position: relative !important;
+            top: 6px !important;
+        }
+
+        /*
+         * چیدمان تمیز و یکنواخت تاریخ و زمان انتشار
+         * بدون ساخت یا تکرار هیچ برچسب جدید
+         */
+        #content-main
+        .form-row.field-published_at
+        .datetime {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+            flex-wrap: nowrap !important;
+
+            column-gap: 14px !important;
+            row-gap: 0 !important;
+
+            margin: 0 !important;
+            padding: 0 !important;
+
+            direction: rtl !important;
+
+            font-family:
+                "Vazirmatn",
+                Tahoma,
+                "Segoe UI",
+                Arial,
+                sans-serif !important;
+
+            font-size: 16px !important;
+            font-weight: 400 !important;
+            font-style: normal !important;
+            font-variant: normal !important;
+            line-height: 1.75 !important;
+        }
+
+        #content-main
+        .form-row.field-published_at
+        .datetime > label,
+        #content-main
+        .form-row.field-published_at
+        .datetime > span,
+        #content-main
+        .form-row.field-published_at
+        .datetime > strong,
+        #content-main
+        .form-row.field-published_at
+        .datetime > b {
+            margin: 0 !important;
+            padding: 0 !important;
+
+            font-family: inherit !important;
+            font-size: 16px !important;
+            font-weight: 400 !important;
+            font-style: normal !important;
+            line-height: 1.75 !important;
+
+            white-space: nowrap !important;
+        }
+
+        #content-main
+        .form-row.field-published_at
+        .datetime input {
+            flex: 0 0 auto !important;
+            margin: 0 !important;
+        }
+
+        /*
+         * چیدمان دو فیلد وضعیت پروژه
+         */
+        #content-main
+        .form-row.field-construction_status.field-publication_status {
+            display: grid !important;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr)) !important;
+
+            align-items: center !important;
+            column-gap: 40px !important;
+
+            direction: rtl !important;
+            overflow: visible !important;
+        }
+
+        /*
+         * قرارگرفتن عنوان و فیلد در یک خط
+         */
+        #content-main
+        .form-row.field-construction_status.field-publication_status
+        .fieldBox {
+            float: none !important;
+
+            display: grid !important;
+
+            grid-template-columns:
+                max-content 220px !important;
+
+            align-items: center !important;
+            justify-content: start !important;
+            column-gap: 18px !important;
+
+            width: auto !important;
+            min-width: 0 !important;
+
+            margin: 0 !important;
+            padding: 0 !important;
+
+            overflow: visible !important;
+        }
+
+        /*
+         * موقعیت عنوان‌های وضعیت
+         */
+        #content-main
+        .form-row.field-construction_status.field-publication_status
+        .fieldBox
+        > label {
+            position: static !important;
+
+            top: auto !important;
+            transform: none !important;
+
+            width: auto !important;
+
+            margin: 0 !important;
+            padding: 0 !important;
+
+            line-height: 46px !important;
+            white-space: nowrap !important;
+        }
+
+        /*
+         * محفظه انتخاب‌گر سفارشی
+         */
+        .project-status-custom-select {
+            position: relative !important;
+
+            width: 220px !important;
+            height: 46px !important;
+
+            margin: 0 !important;
+            padding: 0 !important;
+
+            box-sizing: border-box !important;
+            overflow: visible !important;
+        }
+
+        /*
+         * select واقعی Django مخفی می‌شود،
+         * اما مقدار آن همچنان همراه فرم ارسال می‌شود.
+         */
+        .project-status-native-select {
+            position: absolute !important;
+
+            width: 1px !important;
+            height: 1px !important;
+
+            margin: 0 !important;
+            padding: 0 !important;
+
+            opacity: 0 !important;
+            overflow: hidden !important;
+            pointer-events: none !important;
+
+            right: 0 !important;
+            bottom: 0 !important;
+        }
+
+        /*
+         * بخش بسته انتخاب‌گر
+         */
+        .project-status-select-button {
+            position: relative !important;
+
+            display: flex !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+
+            width: 220px !important;
+            height: 46px !important;
+            min-height: 46px !important;
+
+            margin: 0 !important;
+            padding: 0 14px 0 42px !important;
+
+            border:
+                1px solid
+                var(--border-color, #4b4b4b) !important;
+
+            border-radius: 5px !important;
+
+            background:
+                var(--body-bg, #121212) !important;
+
+            color:
+                var(--body-fg, #eeeeee) !important;
+
+            font-family:
+                var(
+                    --admin-font-family,
+                    "Vazirmatn",
+                    Tahoma,
+                    "Segoe UI",
+                    Arial,
+                    sans-serif
+                ) !important;
+
+            font-size: 16px !important;
+            font-weight: 500 !important;
+            font-style: normal !important;
+            font-variant: normal !important;
+            line-height: 1.8 !important;
+
+            direction: rtl !important;
+            text-align: right !important;
+
+            box-sizing: border-box !important;
+            cursor: pointer !important;
+        }
+
+        .project-status-select-button:hover {
+            border-color:
+                var(--body-quiet-color, #777777) !important;
+        }
+
+        .project-status-select-button:focus {
+            border-color:
+                var(--accent, #79aec8) !important;
+
+            outline:
+                2px solid
+                color-mix(
+                    in srgb,
+                    var(--accent, #79aec8) 30%,
+                    transparent
+                ) !important;
+
+            outline-offset: 1px !important;
+        }
+
+        /*
+         * متن داخل فیلد بسته
+         */
+        .project-status-select-button-text {
+            display: block !important;
+
+            width: 100% !important;
+
+            margin: 0 !important;
+            padding: 0 !important;
+
+            color: inherit !important;
+
+            font-family: inherit !important;
+            font-size: inherit !important;
+            font-weight: inherit !important;
+            font-style: normal !important;
+            line-height: inherit !important;
+
+            direction: rtl !important;
+            text-align: right !important;
+            white-space: nowrap !important;
+
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+        }
+
+        /*
+         * فلش انتخاب‌گر
+         */
+        .project-status-select-arrow {
+            position: absolute !important;
+
+            top: 50% !important;
+            left: 15px !important;
+
+            width: 8px !important;
+            height: 8px !important;
+
+            border-left:
+                2px solid
+                currentColor !important;
+
+            border-bottom:
+                2px solid
+                currentColor !important;
+
+            transform:
+                translateY(-65%)
+                rotate(-45deg) !important;
+
+            transform-origin: center !important;
+
+            color:
+                var(--body-quiet-color, #b5b5b5) !important;
+
+            pointer-events: none !important;
+
+            transition:
+                transform 0.15s ease !important;
+        }
+
+        .project-status-custom-select.is-open
+        .project-status-select-arrow {
+            transform:
+                translateY(-35%)
+                rotate(135deg) !important;
+        }
+
+        /*
+         * فهرست گزینه‌های سفارشی
+         */
+        .project-status-options {
+            position: absolute !important;
+            z-index: 10000 !important;
+
+            top: calc(100% + 3px) !important;
+            right: 0 !important;
+
+            display: none !important;
+
+            width: 220px !important;
+            max-height: 260px !important;
+
+            margin: 0 !important;
+            padding: 4px !important;
+
+            border:
+                1px solid
+                var(--border-color, #555555) !important;
+
+            border-radius: 6px !important;
+
+            background:
+                var(--body-bg, #121212) !important;
+
+            box-shadow:
+                0 8px 22px
+                rgba(0, 0, 0, 0.35) !important;
+
+            box-sizing: border-box !important;
+            overflow-x: hidden !important;
+            overflow-y: auto !important;
+
+            direction: rtl !important;
+        }
+
+        .project-status-custom-select.is-open
+        .project-status-options {
+            display: block !important;
+        }
+
+        /*
+         * گزینه‌های داخل فهرست
+         */
+        .project-status-option {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+
+            width: 100% !important;
+            min-height: 40px !important;
+
+            margin: 0 !important;
+            padding: 6px 10px !important;
+
+            border: 0 !important;
+            border-radius: 3px !important;
+
+            background: transparent !important;
+
+            color:
+                var(--body-fg, #eeeeee) !important;
+
+            font-family:
+                var(
+                    --admin-font-family,
+                    "Vazirmatn",
+                    Tahoma,
+                    "Segoe UI",
+                    Arial,
+                    sans-serif
+                ) !important;
+
+            font-size: 16px !important;
+            font-weight: 500 !important;
+            font-style: normal !important;
+            font-variant: normal !important;
+            line-height: 1.8 !important;
+
+            direction: rtl !important;
+            text-align: right !important;
+            white-space: nowrap !important;
+
+            box-sizing: border-box !important;
+            cursor: pointer !important;
+        }
+
+        .project-status-option:hover,
+        .project-status-option:focus {
+            background:
+                var(--darkened-bg, #292929) !important;
+
+            outline: none !important;
+        }
+
+        .project-status-option.is-selected {
+            background:
+                var(--selected-row, #5d5d6c) !important;
+        }
+
+        .project-status-option:disabled {
+            opacity: 0.5 !important;
+            cursor: not-allowed !important;
+        }
+
+        /*
+         * نمایش مناسب در صفحه‌های باریک
+         */
+        @media (max-width: 900px) {
+            #content-main
+            .form-row.field-construction_status.field-publication_status {
+                grid-template-columns: 1fr !important;
+                row-gap: 16px !important;
+            }
+        }
+
+
+        /*
+         * چیدمان قطعی و بدون متن تکراری برای فیلد تاریخ و زمان انتشار
+         */
+        #content-main
+        .form-row.field-published_at
+        .datetime.project-published-datetime-layout {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+            flex-wrap: nowrap !important;
+            gap: 24px !important;
+            direction: rtl !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        #content-main
+        .form-row.field-published_at
+        .project-published-datetime-group {
+            display: inline-flex !important;
+            align-items: center !important;
+            flex: 0 0 auto !important;
+            gap: 10px !important;
+            direction: rtl !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        #content-main
+        .form-row.field-published_at
+        .project-published-datetime-label {
+            display: inline-flex !important;
+            align-items: center !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            font-family:
+                "Vazirmatn",
+                Tahoma,
+                "Segoe UI",
+                Arial,
+                sans-serif !important;
+            font-size: 16px !important;
+            font-weight: 400 !important;
+            font-style: normal !important;
+            font-variant: normal !important;
+            line-height: 1.75 !important;
+            white-space: nowrap !important;
+        }
+
+        #content-main
+        .form-row.field-published_at
+        .project-published-datetime-group
+        input {
+            flex: 0 0 auto !important;
+            margin: 0 !important;
+        }
+    </style>
+
+    <script>
+        (function () {
+            "use strict";
+
+            const selectIds = [
+                "id_construction_status",
+                "id_publication_status"
+            ];
+
+            function closeCustomSelect(wrapper) {
+                wrapper.classList.remove("is-open");
+
+                const button = wrapper.querySelector(
+                    ".project-status-select-button"
+                );
+
+                if (button) {
+                    button.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+                }
+            }
+
+            function closeOtherCustomSelects(
+                currentWrapper
+            ) {
+                document
+                    .querySelectorAll(
+                        ".project-status-custom-select.is-open"
+                    )
+                    .forEach(function (wrapper) {
+                        if (wrapper !== currentWrapper) {
+                            closeCustomSelect(wrapper);
+                        }
+                    });
+            }
+
+            function buildCustomSelect(selectId) {
+                const select = document.getElementById(
+                    selectId
+                );
+
+                if (!select) {
+                    return;
+                }
+
+                if (
+                    select.dataset
+                        .projectCustomSelectReady ===
+                    "true"
+                ) {
+                    return;
+                }
+
+                select.dataset
+                    .projectCustomSelectReady =
+                    "true";
+
+                const wrapper =
+                    document.createElement("div");
+
+                wrapper.className =
+                    "project-status-custom-select";
+
+                select.parentNode.insertBefore(
+                    wrapper,
+                    select
+                );
+
+                wrapper.appendChild(select);
+
+                select.classList.add(
+                    "project-status-native-select"
+                );
+
+                const button =
+                    document.createElement("button");
+
+                button.type = "button";
+
+                button.className =
+                    "project-status-select-button";
+
+                button.setAttribute(
+                    "aria-haspopup",
+                    "listbox"
+                );
+
+                button.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+
+                const buttonText =
+                    document.createElement("span");
+
+                buttonText.className =
+                    "project-status-select-button-text";
+
+                const arrow =
+                    document.createElement("span");
+
+                arrow.className =
+                    "project-status-select-arrow";
+
+                arrow.setAttribute(
+                    "aria-hidden",
+                    "true"
+                );
+
+                button.appendChild(buttonText);
+                button.appendChild(arrow);
+
+                const optionsContainer =
+                    document.createElement("div");
+
+                optionsContainer.className =
+                    "project-status-options";
+
+                optionsContainer.setAttribute(
+                    "role",
+                    "listbox"
+                );
+
+                wrapper.appendChild(button);
+                wrapper.appendChild(optionsContainer);
+
+                function updateSelectedOption() {
+                    const selectedOption =
+                        select.options[
+                            select.selectedIndex
+                        ];
+
+                    buttonText.textContent =
+                        selectedOption
+                            ? selectedOption.text.trim()
+                            : "";
+
+                    optionsContainer
+                        .querySelectorAll(
+                            ".project-status-option"
+                        )
+                        .forEach(function (optionButton) {
+                            const isSelected =
+                                optionButton.dataset
+                                    .value ===
+                                select.value;
+
+                            optionButton.classList.toggle(
+                                "is-selected",
+                                isSelected
+                            );
+
+                            optionButton.setAttribute(
+                                "aria-selected",
+                                isSelected
+                                    ? "true"
+                                    : "false"
+                            );
+                        });
+                }
+
+                Array.from(select.options).forEach(
+                    function (option) {
+                        const optionButton =
+                            document.createElement(
+                                "button"
+                            );
+
+                        optionButton.type = "button";
+
+                        optionButton.className =
+                            "project-status-option";
+
+                        optionButton.textContent =
+                            option.text.trim();
+
+                        optionButton.dataset.value =
+                            option.value;
+
+                        optionButton.disabled =
+                            option.disabled;
+
+                        optionButton.setAttribute(
+                            "role",
+                            "option"
+                        );
+
+                        optionButton.addEventListener(
+                            "click",
+                            function () {
+                                if (
+                                    optionButton.disabled
+                                ) {
+                                    return;
+                                }
+
+                                select.value =
+                                    option.value;
+
+                                select.dispatchEvent(
+                                    new Event(
+                                        "change",
+                                        {
+                                            bubbles: true
+                                        }
+                                    )
+                                );
+
+                                updateSelectedOption();
+                                closeCustomSelect(wrapper);
+                                button.focus();
+                            }
+                        );
+
+                        optionButton.addEventListener(
+                            "keydown",
+                            function (event) {
+                                const options =
+                                    Array.from(
+                                        optionsContainer
+                                            .querySelectorAll(
+                                                ".project-status-option:not(:disabled)"
+                                            )
+                                    );
+
+                                const currentIndex =
+                                    options.indexOf(
+                                        optionButton
+                                    );
+
+                                if (
+                                    event.key ===
+                                    "ArrowDown"
+                                ) {
+                                    event.preventDefault();
+
+                                    const nextOption =
+                                        options[
+                                            (
+                                                currentIndex +
+                                                1
+                                            ) %
+                                            options.length
+                                        ];
+
+                                    nextOption.focus();
+                                }
+
+                                if (
+                                    event.key ===
+                                    "ArrowUp"
+                                ) {
+                                    event.preventDefault();
+
+                                    const previousIndex =
+                                        (
+                                            currentIndex -
+                                            1 +
+                                            options.length
+                                        ) %
+                                        options.length;
+
+                                    options[
+                                        previousIndex
+                                    ].focus();
+                                }
+
+                                if (
+                                    event.key ===
+                                    "Escape"
+                                ) {
+                                    event.preventDefault();
+
+                                    closeCustomSelect(
+                                        wrapper
+                                    );
+
+                                    button.focus();
+                                }
+                            }
+                        );
+
+                        optionsContainer.appendChild(
+                            optionButton
+                        );
+                    }
+                );
+
+                button.addEventListener(
+                    "click",
+                    function () {
+                        const shouldOpen =
+                            !wrapper.classList.contains(
+                                "is-open"
+                            );
+
+                        closeOtherCustomSelects(
+                            wrapper
+                        );
+
+                        wrapper.classList.toggle(
+                            "is-open",
+                            shouldOpen
+                        );
+
+                        button.setAttribute(
+                            "aria-expanded",
+                            shouldOpen
+                                ? "true"
+                                : "false"
+                        );
+
+                        if (shouldOpen) {
+                            const selectedButton =
+                                optionsContainer
+                                    .querySelector(
+                                        ".project-status-option.is-selected"
+                                    );
+
+                            if (selectedButton) {
+                                selectedButton.focus();
+                            }
+                        }
+                    }
+                );
+
+                button.addEventListener(
+                    "keydown",
+                    function (event) {
+                        if (
+                            event.key ===
+                                "ArrowDown" ||
+                            event.key ===
+                                "ArrowUp"
+                        ) {
+                            event.preventDefault();
+
+                            closeOtherCustomSelects(
+                                wrapper
+                            );
+
+                            wrapper.classList.add(
+                                "is-open"
+                            );
+
+                            button.setAttribute(
+                                "aria-expanded",
+                                "true"
+                            );
+
+                            const selectedButton =
+                                optionsContainer
+                                    .querySelector(
+                                        ".project-status-option.is-selected"
+                                    );
+
+                            const firstButton =
+                                optionsContainer
+                                    .querySelector(
+                                        ".project-status-option:not(:disabled)"
+                                    );
+
+                            (
+                                selectedButton ||
+                                firstButton
+                            )?.focus();
+                        }
+
+                        if (
+                            event.key ===
+                            "Escape"
+                        ) {
+                            closeCustomSelect(wrapper);
+                        }
+                    }
+                );
+
+                select.addEventListener(
+                    "change",
+                    updateSelectedOption
+                );
+
+                document.addEventListener(
+                    "click",
+                    function (event) {
+                        if (
+                            !wrapper.contains(
+                                event.target
+                            )
+                        ) {
+                            closeCustomSelect(wrapper);
+                        }
+                    }
+                );
+
+                updateSelectedOption();
+            }
+
+            function startCustomSelects() {
+                selectIds.forEach(
+                    buildCustomSelect
+                );
+            }
+
+            if (
+                document.readyState === "loading"
+            ) {
+                document.addEventListener(
+                    "DOMContentLoaded",
+                    startCustomSelects,
+                    {
+                        once: true
+                    }
+                );
+            } else {
+                startCustomSelects();
+            }
+        }());
+    </script>
+
+    <script>
+        (function () {
+            "use strict";
+
+            const persianDigits =
+                "۰۱۲۳۴۵۶۷۸۹";
+
+            function convertToPersianDigits(
+                value
+            ) {
+                return value.replace(
+                    /[0-9]/g,
+                    function (digit) {
+                        return persianDigits[
+                            Number(digit)
+                        ];
+                    }
+                );
+            }
+
+            function localizeCalendarDigits(
+                calendar
+            ) {
+                const walker =
+                    document.createTreeWalker(
+                        calendar,
+                        NodeFilter.SHOW_TEXT
+                    );
+
+                const textNodes = [];
+
+                while (walker.nextNode()) {
+                    textNodes.push(
+                        walker.currentNode
+                    );
+                }
+
+                textNodes.forEach(
+                    function (node) {
+                        const currentText =
+                            node.nodeValue || "";
+
+                        const localizedText =
+                            convertToPersianDigits(
+                                currentText
+                            );
+
+                        if (
+                            currentText !==
+                            localizedText
+                        ) {
+                            node.nodeValue =
+                                localizedText;
+                        }
+                    }
+                );
+            }
+
+            function connectToCalendar() {
+                const calendar =
+                    document.getElementById(
+                        "ui-datepicker-div"
+                    );
+
+                if (!calendar) {
+                    return false;
+                }
+
+                if (
+                    calendar.dataset
+                        .persianDigitsConnected ===
+                    "true"
+                ) {
+                    return true;
+                }
+
+                calendar.dataset
+                    .persianDigitsConnected =
+                    "true";
+
+                localizeCalendarDigits(
+                    calendar
+                );
+
+                const calendarObserver =
+                    new MutationObserver(
+                        function () {
+                            localizeCalendarDigits(
+                                calendar
+                            );
+                        }
+                    );
+
+                calendarObserver.observe(
+                    calendar,
+                    {
+                        childList: true,
+                        characterData: true,
+                        subtree: true
+                    }
+                );
+
+                return true;
+            }
+
+            function startPersianCalendarDigits() {
+                if (connectToCalendar()) {
+                    return;
+                }
+
+                const calendarFinder =
+                    new MutationObserver(
+                        function () {
+                            if (
+                                connectToCalendar()
+                            ) {
+                                calendarFinder
+                                    .disconnect();
+                            }
+                        }
+                    );
+
+                calendarFinder.observe(
+                    document.documentElement,
+                    {
+                        childList: true,
+                        subtree: true
+                    }
+                );
+            }
+
+            if (
+                document.readyState === "loading"
+            ) {
+                document.addEventListener(
+                    "DOMContentLoaded",
+                    startPersianCalendarDigits,
+                    {
+                        once: true
+                    }
+                );
+            } else {
+                startPersianCalendarDigits();
+            }
+        }());
+    </script>
+
+
+    <script>
+        (function () {
+            "use strict";
+
+            function normalizeText(value) {
+                return (value || "")
+                    .replace(/\s+/g, " ")
+                    .trim();
+            }
+
+            function alignPublishedAtLabel() {
+                const row = document.querySelector(
+                    "#content-main .form-row.field-published_at"
+                );
+
+                if (!row) {
+                    return;
+                }
+
+                const label = Array.from(
+                    row.querySelectorAll("label")
+                ).find(function (item) {
+                    return normalizeText(
+                        item.textContent
+                    ).startsWith(
+                        "تاریخ و زمان انتشار"
+                    );
+                });
+
+                if (!label) {
+                    return;
+                }
+
+                label.style.setProperty(
+                    "position",
+                    "relative",
+                    "important"
+                );
+
+                label.style.setProperty(
+                    "top",
+                    "auto",
+                    "important"
+                );
+
+                label.style.setProperty(
+                    "transform",
+                    "translateY(10px)",
+                    "important"
+                );
+            }
+
+            function startPublishedAtAlignment() {
+                alignPublishedAtLabel();
+
+                window.setTimeout(
+                    alignPublishedAtLabel,
+                    0
+                );
+
+                window.setTimeout(
+                    alignPublishedAtLabel,
+                    150
+                );
+            }
+
+            if (document.readyState === "loading") {
+                document.addEventListener(
+                    "DOMContentLoaded",
+                    startPublishedAtAlignment,
+                    { once: true }
+                );
+            } else {
+                startPublishedAtAlignment();
+            }
+        }());
+    </script>
+
+
+    <script>
+        (function () {
+            "use strict";
+
+            function createPublishedAtLabel(text) {
+                const label = document.createElement("span");
+
+                label.className =
+                    "project-published-datetime-label";
+
+                label.textContent = text;
+
+                label.style.setProperty(
+                    "font-size",
+                    "16px",
+                    "important"
+                );
+
+                label.style.setProperty(
+                    "font-weight",
+                    "400",
+                    "important"
+                );
+
+                label.style.setProperty(
+                    "line-height",
+                    "1.75",
+                    "important"
+                );
+
+                return label;
+            }
+
+            function rebuildPublishedAtLayout() {
+                const datetime = document.querySelector(
+                    "#content-main "
+                    + ".form-row.field-published_at "
+                    + ".datetime"
+                );
+
+                const dateInput = document.getElementById(
+                    "id_published_at_0"
+                );
+
+                const timeInput = document.getElementById(
+                    "id_published_at_1"
+                );
+
+                if (!datetime || !dateInput || !timeInput) {
+                    return;
+                }
+
+                if (
+                    datetime.dataset
+                        .projectPublishedLayoutReady ===
+                    "true"
+                ) {
+                    return;
+                }
+
+                const dateGroup =
+                    document.createElement("span");
+
+                dateGroup.className =
+                    "project-published-datetime-group "
+                    + "project-published-date-group";
+
+                const timeGroup =
+                    document.createElement("span");
+
+                timeGroup.className =
+                    "project-published-datetime-group "
+                    + "project-published-time-group";
+
+                const dateLabel =
+                    createPublishedAtLabel("تاریخ:");
+
+                const timeLabel =
+                    createPublishedAtLabel("زمان:");
+
+                dateGroup.append(
+                    dateLabel,
+                    dateInput
+                );
+
+                timeGroup.append(
+                    timeLabel,
+                    timeInput
+                );
+
+                datetime.replaceChildren(
+                    dateGroup,
+                    timeGroup
+                );
+
+                datetime.classList.add(
+                    "project-published-datetime-layout"
+                );
+
+                datetime.dataset
+                    .projectPublishedLayoutReady =
+                    "true";
+            }
+
+            function startPublishedAtLayout() {
+                rebuildPublishedAtLayout();
+
+                window.setTimeout(
+                    rebuildPublishedAtLayout,
+                    0
+                );
+
+                window.setTimeout(
+                    rebuildPublishedAtLayout,
+                    150
+                );
+            }
+
+            if (document.readyState === "loading") {
+                document.addEventListener(
+                    "DOMContentLoaded",
+                    startPublishedAtLayout,
+                    { once: true }
+                );
+            } else {
+                startPublishedAtLayout();
+            }
+        }());
+    </script>
+
+    <script>
+        (function () {
+            "use strict";
+
+            function normalizePublishedAtText(value) {
+                return (value || "")
+                    .replace(/\s+/g, " ")
+                    .trim();
+            }
+
+            function removeOnlyStrayTimeLabel() {
+                const row = document.querySelector(
+                    "#content-main .form-row.field-published_at"
+                );
+
+                if (!row) {
+                    return;
+                }
+
+                /*
+                 * برچسب استاندارد زمان که باید باقی بماند، داخل
+                 * project-published-time-group قرار دارد.
+                 * فقط نمونه قدیمی/اضافی خارج از این گروه حذف می‌شود.
+                 */
+                row.querySelectorAll(
+                    "label, span, strong, b"
+                ).forEach(function (element) {
+                    const isWantedTimeLabel = Boolean(
+                        element.closest(
+                            ".project-published-time-group"
+                        )
+                    );
+
+                    const isExactStrayLabel =
+                        normalizePublishedAtText(
+                            element.textContent
+                        ) === "زمان:";
+
+                    if (
+                        isExactStrayLabel
+                        && !isWantedTimeLabel
+                        && !element.querySelector("input")
+                    ) {
+                        element.remove();
+                    }
+                });
+
+                const walker = document.createTreeWalker(
+                    row,
+                    NodeFilter.SHOW_TEXT
+                );
+
+                const strayTextNodes = [];
+                let textNode = walker.nextNode();
+
+                while (textNode) {
+                    const parent = textNode.parentElement;
+                    const isWantedTimeLabel = Boolean(
+                        parent
+                        && parent.closest(
+                            ".project-published-time-group"
+                        )
+                    );
+
+                    if (
+                        normalizePublishedAtText(
+                            textNode.nodeValue
+                        ) === "زمان:"
+                        && !isWantedTimeLabel
+                    ) {
+                        strayTextNodes.push(textNode);
+                    }
+
+                    textNode = walker.nextNode();
+                }
+
+                strayTextNodes.forEach(function (node) {
+                    node.remove();
+                });
+            }
+
+            function startStrayTimeCleanup() {
+                removeOnlyStrayTimeLabel();
+
+                window.setTimeout(
+                    removeOnlyStrayTimeLabel,
+                    0
+                );
+
+                window.setTimeout(
+                    removeOnlyStrayTimeLabel,
+                    200
+                );
+
+                window.setTimeout(
+                    removeOnlyStrayTimeLabel,
+                    500
+                );
+            }
+
+            if (document.readyState === "loading") {
+                document.addEventListener(
+                    "DOMContentLoaded",
+                    startStrayTimeCleanup,
+                    { once: true }
+                );
+            } else {
+                startStrayTimeCleanup();
+            }
+        }());
+    </script>
+
+{% endblock %}

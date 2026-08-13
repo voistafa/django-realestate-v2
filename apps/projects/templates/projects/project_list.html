@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+{% load static humanize %}
+
+
+{% block title %}
+پروژه‌های ساختمانی کلاردشت | کلارخانه
+{% endblock %}
+
+
+{% block meta_description %}
+مشاهده پروژه‌های ساختمانی منتشرشده در مناطق مختلف کلاردشت
+{% endblock %}
+
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{% static 'projects/css/project-list.css' %}"
+>
+{% endblock %}
+
+
+{% block content %}
+
+<section class="section section-muted project-list-page">
+    <div class="container">
+
+        <div class="section-heading">
+            <div>
+                <span class="section-eyebrow">
+                    فرصت‌های سرمایه‌گذاری
+                </span>
+
+                <h1>
+                    پروژه‌های ساختمانی
+                </h1>
+            </div>
+
+            <p>
+                پروژه‌های منتشرشده در مناطق مختلف کلاردشت را بررسی کنید.
+            </p>
+        </div>
+
+
+        <div class="project-grid">
+
+            {% for project in projects %}
+
+                <article class="project-card">
+
+                    <div class="project-card-media">
+
+                        {% if project.list_images %}
+                            <img
+                                src="{{ project.list_images.0.image.url }}"
+                                alt="{{ project.list_images.0.alt_text|default:project.title }}"
+                                loading="lazy"
+                                decoding="async"
+                            >
+                        {% else %}
+                            <div class="card-image-placeholder">
+                                تصویر پروژه به‌زودی
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="project-card-content">
+
+                        <div class="project-location">
+                            {{ project.region.name }}،
+                            {{ project.region.city.name }}
+                        </div>
+
+                        <h3>
+                            {{ project.title }}
+                        </h3>
+
+                        <span class="project-status">
+                            {{ project.get_construction_status_display }}
+                        </span>
+
+
+                        {% if project.short_description %}
+                            <p>
+                                {{ project.short_description|truncatechars:110 }}
+                            </p>
+                        {% endif %}
+
+
+                        <div class="project-progress">
+
+                            <div class="project-progress-heading">
+                                <span>
+                                    پیشرفت پروژه
+                                </span>
+
+                                <strong>
+                                    {{ project.completion_percentage }}٪
+                                </strong>
+                            </div>
+
+                            <div class="project-progress-track">
+                                <span
+                                    style="width: {{ project.completion_percentage }}%;"
+                                ></span>
+                            </div>
+
+                        </div>
+
+
+                        <div class="project-card-footer">
+
+                            {% if project.price_on_request %}
+
+                                <strong>
+                                    قیمت پس از مشاوره
+                                </strong>
+
+                            {% elif project.starting_price %}
+
+                                <strong>
+                                    شروع قیمت از
+                                    {{ project.starting_price|intcomma }}
+
+                                    {% if project.currency_code == "IRT" %}
+                                        تومان
+                                    {% else %}
+                                        {{ project.get_currency_code_display }}
+                                    {% endif %}
+                                </strong>
+
+                            {% else %}
+
+                                <strong>
+                                    قیمت ثبت نشده
+                                </strong>
+
+                            {% endif %}
+
+                            <span>
+                                کد {{ project.reference_code }}
+                            </span>
+
+                        </div>
+
+
+                        <a
+                            class="button button-secondary"
+                            href="{% url 'projects:detail' project.slug %}"
+                        >
+                            مشاهده جزئیات پروژه
+                        </a>
+
+                    </div>
+
+                </article>
+
+            {% empty %}
+
+                <div class="empty-state">
+                    هنوز پروژه‌ای منتشر نشده است.
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        {% if page_obj.paginator.num_pages > 1 %}
+
+            <div class="section-actions">
+
+                {% if page_obj.has_previous %}
+                    <a
+                        class="button button-secondary"
+                        href="?page={{ page_obj.previous_page_number }}"
+                    >
+                        صفحه قبل
+                    </a>
+                {% endif %}
+
+
+                {% if page_obj.has_next %}
+                    <a
+                        class="button button-secondary"
+                        href="?page={{ page_obj.next_page_number }}"
+                    >
+                        صفحه بعد
+                    </a>
+                {% endif %}
+
+            </div>
+
+        {% endif %}
+
+    </div>
+</section>
+
+{% endblock %}

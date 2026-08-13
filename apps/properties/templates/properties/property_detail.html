@@ -1,0 +1,1112 @@
+{% extends "base.html" %}
+{% load static humanize %}
+
+
+{% block title %}
+    {{ property.title }} | کلارخانه
+{% endblock %}
+
+
+{% block meta_description %}
+    {{ property.short_description|default:property.description|striptags|truncatechars:160 }}
+{% endblock %}
+
+
+{% block extra_css %}
+    <link
+        rel="stylesheet"
+        href="{% static 'properties/css/property-detail.css' %}?v=2"
+    >
+{% endblock %}
+
+
+{% block content %}
+
+    <section class="property-detail-hero">
+        <div class="container">
+
+            <nav
+                class="property-detail-breadcrumb"
+                aria-label="مسیر صفحه"
+            >
+                <a href="{% url 'core:home' %}">
+                    صفحه اصلی
+                </a>
+
+                <span aria-hidden="true">/</span>
+
+                <a href="{% url 'properties:list' %}">
+                    املاک
+                </a>
+
+                <span aria-hidden="true">/</span>
+
+                <span aria-current="page">
+                    {{ property.title }}
+                </span>
+            </nav>
+
+
+            <div class="property-detail-hero__content">
+
+                <div class="property-detail-hero__information">
+
+                    <div class="property-detail-hero__badges">
+
+                        <span class="property-detail-badge">
+                            {{ property.get_transaction_type_display }}
+                        </span>
+
+
+                        {% if property.is_featured %}
+                            <span class="property-detail-badge property-detail-badge--featured">
+                                ملک ویژه
+                            </span>
+                        {% endif %}
+
+
+                        {% if property.availability_status != "available" %}
+                            <span class="property-detail-badge">
+                                {{ property.get_availability_status_display }}
+                            </span>
+                        {% endif %}
+
+                    </div>
+
+
+                    <h1>
+                        {{ property.title }}
+                    </h1>
+
+
+                    <div class="property-detail-hero__meta">
+
+                        <span>
+                            {{ property.region.name }}
+                        </span>
+
+                        <span aria-hidden="true">•</span>
+
+                        <span>
+                            {{ property.property_type.name }}
+                        </span>
+
+                        <span aria-hidden="true">•</span>
+
+                        <span>
+                            کد ملک:
+                            {{ property.reference_code }}
+                        </span>
+
+                    </div>
+
+
+                    {% if property.short_description %}
+                        <p class="property-detail-hero__description">
+                            {{ property.short_description }}
+                        </p>
+                    {% endif %}
+
+                </div>
+
+
+                <div class="property-detail-price">
+
+                    {% if property.price_on_request %}
+
+                        <small>
+                            قیمت ملک
+                        </small>
+
+                        <strong>
+                            تماس بگیرید
+                        </strong>
+
+                        {% if property.is_price_negotiable %}
+                            <span>
+                                قابل مذاکره
+                            </span>
+                        {% endif %}
+
+
+                    {% elif property.transaction_type == "sale" %}
+
+                        <small>
+                            قیمت فروش
+                        </small>
+
+                        {% if property.sale_price %}
+                            <strong>
+                                {{ property.sale_price|intcomma }}
+                            </strong>
+
+                            <span>
+                                {% if property.currency_code == "IRT" %}
+                                    تومان
+                                {% elif property.currency_code == "USD" %}
+                                    دلار
+                                {% elif property.currency_code == "EUR" %}
+                                    یورو
+                                {% elif property.currency_code == "AED" %}
+                                    درهم
+                                {% else %}
+                                    {{ property.currency_code }}
+                                {% endif %}
+                            </span>
+                        {% else %}
+                            <strong>
+                                قیمت ثبت نشده
+                            </strong>
+                        {% endif %}
+
+
+                    {% elif property.transaction_type == "pre_sale" %}
+
+                        <small>
+                            قیمت پیش‌فروش
+                        </small>
+
+                        {% if property.sale_price %}
+                            <strong>
+                                {{ property.sale_price|intcomma }}
+                            </strong>
+
+                            <span>
+                                {% if property.currency_code == "IRT" %}
+                                    تومان
+                                {% elif property.currency_code == "USD" %}
+                                    دلار
+                                {% elif property.currency_code == "EUR" %}
+                                    یورو
+                                {% elif property.currency_code == "AED" %}
+                                    درهم
+                                {% else %}
+                                    {{ property.currency_code }}
+                                {% endif %}
+                            </span>
+                        {% else %}
+                            <strong>
+                                قیمت ثبت نشده
+                            </strong>
+                        {% endif %}
+
+
+                    {% elif property.transaction_type == "full_mortgage" %}
+
+                        <small>
+                            مبلغ رهن کامل
+                        </small>
+
+                        {% if property.deposit_amount %}
+                            <strong>
+                                {{ property.deposit_amount|intcomma }}
+                            </strong>
+
+                            <span>
+                                {% if property.currency_code == "IRT" %}
+                                    تومان
+                                {% elif property.currency_code == "USD" %}
+                                    دلار
+                                {% elif property.currency_code == "EUR" %}
+                                    یورو
+                                {% elif property.currency_code == "AED" %}
+                                    درهم
+                                {% else %}
+                                    {{ property.currency_code }}
+                                {% endif %}
+                            </span>
+                        {% else %}
+                            <strong>
+                                مبلغ رهن ثبت نشده
+                            </strong>
+                        {% endif %}
+
+
+                    {% elif property.transaction_type == "mortgage_rent" %}
+
+                        <small>
+                            مبلغ ودیعه
+                        </small>
+
+                        {% if property.deposit_amount %}
+                            <strong>
+                                {{ property.deposit_amount|intcomma }}
+                            </strong>
+
+                            <span>
+                                {% if property.currency_code == "IRT" %}
+                                    تومان
+                                {% elif property.currency_code == "USD" %}
+                                    دلار
+                                {% elif property.currency_code == "EUR" %}
+                                    یورو
+                                {% elif property.currency_code == "AED" %}
+                                    درهم
+                                {% else %}
+                                    {{ property.currency_code }}
+                                {% endif %}
+                            </span>
+                        {% else %}
+                            <strong>
+                                مبلغ ودیعه ثبت نشده
+                            </strong>
+                        {% endif %}
+
+
+                        <small>
+                            اجاره ماهانه
+                        </small>
+
+                        {% if property.monthly_rent %}
+                            <strong>
+                                {{ property.monthly_rent|intcomma }}
+                            </strong>
+
+                            <span>
+                                {% if property.currency_code == "IRT" %}
+                                    تومان
+                                {% elif property.currency_code == "USD" %}
+                                    دلار
+                                {% elif property.currency_code == "EUR" %}
+                                    یورو
+                                {% elif property.currency_code == "AED" %}
+                                    درهم
+                                {% else %}
+                                    {{ property.currency_code }}
+                                {% endif %}
+                            </span>
+                        {% else %}
+                            <strong>
+                                اجاره ماهانه ثبت نشده
+                            </strong>
+                        {% endif %}
+
+
+                    {% elif property.transaction_type == "rent" %}
+
+                        {% if property.deposit_amount %}
+                            <small>
+                                مبلغ ودیعه
+                            </small>
+
+                            <strong>
+                                {{ property.deposit_amount|intcomma }}
+                            </strong>
+
+                            <span>
+                                {% if property.currency_code == "IRT" %}
+                                    تومان
+                                {% elif property.currency_code == "USD" %}
+                                    دلار
+                                {% elif property.currency_code == "EUR" %}
+                                    یورو
+                                {% elif property.currency_code == "AED" %}
+                                    درهم
+                                {% else %}
+                                    {{ property.currency_code }}
+                                {% endif %}
+                            </span>
+                        {% endif %}
+
+
+                        <small>
+                            اجاره ماهانه
+                        </small>
+
+                        {% if property.monthly_rent %}
+                            <strong>
+                                {{ property.monthly_rent|intcomma }}
+                            </strong>
+
+                            <span>
+                                {% if property.currency_code == "IRT" %}
+                                    تومان
+                                {% elif property.currency_code == "USD" %}
+                                    دلار
+                                {% elif property.currency_code == "EUR" %}
+                                    یورو
+                                {% elif property.currency_code == "AED" %}
+                                    درهم
+                                {% else %}
+                                    {{ property.currency_code }}
+                                {% endif %}
+                            </span>
+                        {% else %}
+                            <strong>
+                                اجاره ماهانه ثبت نشده
+                            </strong>
+                        {% endif %}
+
+
+                    {% else %}
+
+                        <small>
+                            قیمت ملک
+                        </small>
+
+                        <strong>
+                            قیمت ثبت نشده
+                        </strong>
+
+                    {% endif %}
+
+
+                    {% if property.is_price_negotiable and not property.price_on_request %}
+                        <span>
+                            قیمت قابل مذاکره است
+                        </span>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <section class="property-detail-section">
+        <div class="container">
+
+            <div class="property-detail-gallery">
+
+                {% if property_images %}
+
+                    <div class="property-detail-gallery__main">
+                        <img
+                            src="{{ property_images.0.image.url }}"
+                            alt="{{ property_images.0.alt_text|default:property.title }}"
+                        >
+                    </div>
+
+
+                    {% if property_images|length > 1 %}
+
+                        <div class="property-detail-gallery__thumbnails">
+
+                            {% for property_image in property_images|slice:"1:5" %}
+
+                                <figure>
+                                    <img
+                                        src="{{ property_image.image.url }}"
+                                        alt="{{ property_image.alt_text|default:property.title }}"
+                                        loading="lazy"
+                                        decoding="async"
+                                    >
+                                </figure>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% endif %}
+
+                {% else %}
+
+                    <div class="property-detail-gallery__placeholder">
+
+                        <strong>
+                            کلارخانه
+                        </strong>
+
+                        <span>
+                            هنوز تصویری برای این ملک ثبت نشده است.
+                        </span>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="property-detail-layout">
+
+                <div class="property-detail-main">
+
+                    <section class="property-detail-card">
+
+                        <div class="property-detail-heading">
+
+                            <span class="section-eyebrow">
+                                اطلاعات ملک
+                            </span>
+
+                            <h2>
+                                مشخصات اصلی
+                            </h2>
+
+                        </div>
+
+
+                        <div class="property-detail-specifications">
+
+                            <div class="property-detail-specification">
+                                <small>
+                                    نوع معامله
+                                </small>
+
+                                <strong>
+                                    {{ property.get_transaction_type_display }}
+                                </strong>
+                            </div>
+
+
+                            <div class="property-detail-specification">
+                                <small>
+                                    وضعیت ملک
+                                </small>
+
+                                <strong>
+                                    {{ property.get_availability_status_display }}
+                                </strong>
+                            </div>
+
+
+                            {% if property.land_area %}
+                                <div class="property-detail-specification">
+                                    <small>
+                                        مساحت زمین
+                                    </small>
+
+                                    <strong>
+                                        {{ property.land_area|intcomma }}
+                                        مترمربع
+                                    </strong>
+                                </div>
+                            {% endif %}
+
+
+                            {% if property.building_area %}
+                                <div class="property-detail-specification">
+                                    <small>
+                                        مساحت بنا
+                                    </small>
+
+                                    <strong>
+                                        {{ property.building_area|intcomma }}
+                                        مترمربع
+                                    </strong>
+                                </div>
+                            {% endif %}
+
+
+                            <div class="property-detail-specification">
+                                <small>
+                                    اتاق خواب
+                                </small>
+
+                                <strong>
+                                    {{ property.bedrooms|intcomma }}
+                                    اتاق
+                                </strong>
+                            </div>
+
+
+                            <div class="property-detail-specification">
+                                <small>
+                                    سرویس بهداشتی
+                                </small>
+
+                                <strong>
+                                    {{ property.bathrooms|intcomma }}
+                                    سرویس
+                                </strong>
+                            </div>
+
+
+                            <div class="property-detail-specification">
+                                <small>
+                                    پارکینگ
+                                </small>
+
+                                <strong>
+                                    {{ property.parking_spaces|intcomma }}
+                                    جای پارک
+                                </strong>
+                            </div>
+
+
+                            {% if property.year_built %}
+                                <div class="property-detail-specification">
+                                    <small>
+                                        سال ساخت
+                                    </small>
+
+                                    <strong>
+                                        {{ property.year_built }}
+                                    </strong>
+                                </div>
+                            {% endif %}
+
+
+                            {% if property.floor_number != None %}
+                                <div class="property-detail-specification">
+                                    <small>
+                                        طبقه ملک
+                                    </small>
+
+                                    <strong>
+                                        {{ property.floor_number }}
+                                    </strong>
+                                </div>
+                            {% endif %}
+
+
+                            {% if property.total_floors %}
+                                <div class="property-detail-specification">
+                                    <small>
+                                        تعداد کل طبقات
+                                    </small>
+
+                                    <strong>
+                                        {{ property.total_floors }}
+                                    </strong>
+                                </div>
+                            {% endif %}
+
+
+                            <div class="property-detail-specification">
+                                <small>
+                                    نوع سند
+                                </small>
+
+                                <strong>
+                                    {{ property.get_deed_type_display }}
+                                </strong>
+                            </div>
+
+
+                            {% if property.project %}
+                                <div class="property-detail-specification">
+                                    <small>
+                                        پروژه مرتبط
+                                    </small>
+
+                                    <strong>
+                                        {{ property.project.title }}
+                                    </strong>
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+                    </section>
+
+
+                    <section class="property-detail-card">
+
+                        <div class="property-detail-heading">
+
+                            <span class="section-eyebrow">
+                                معرفی کامل
+                            </span>
+
+                            <h2>
+                                توضیحات ملک
+                            </h2>
+
+                        </div>
+
+
+                        <div class="property-detail-description">
+                            {{ property.description|linebreaks }}
+                        </div>
+
+                    </section>
+
+
+                    {% if property_features %}
+
+                        <section class="property-detail-card">
+
+                            <div class="property-detail-heading">
+
+                                <span class="section-eyebrow">
+                                    امکانات
+                                </span>
+
+                                <h2>
+                                    ویژگی‌های این ملک
+                                </h2>
+
+                            </div>
+
+
+                            <div class="property-detail-features">
+
+                                {% for feature in property_features %}
+
+                                    <div class="property-detail-feature">
+
+                                        {% if feature.icon %}
+                                            <span
+                                                class="property-detail-feature__icon"
+                                                aria-hidden="true"
+                                            >
+                                                {{ feature.icon }}
+                                            </span>
+                                        {% endif %}
+
+                                        <span>
+                                            {{ feature.name }}
+                                        </span>
+
+                                    </div>
+
+                                {% endfor %}
+
+                            </div>
+
+                        </section>
+
+                    {% endif %}
+
+
+                    <section class="property-detail-card">
+
+                        <div class="property-detail-heading">
+
+                            <span class="section-eyebrow">
+                                وضعیت مدارک
+                            </span>
+
+                            <h2>
+                                اطلاعات سند
+                            </h2>
+
+                        </div>
+
+
+                        <div class="property-detail-address">
+
+                            <strong>
+                                {{ property.get_deed_type_display }}
+                            </strong>
+
+
+                            {% if property.deed_description %}
+                                <p>
+                                    {{ property.deed_description }}
+                                </p>
+                            {% endif %}
+
+
+                            {% if property.is_document_verified %}
+                                <p>
+                                    مدارک این فایل توسط مجموعه کلارخانه بررسی داخلی شده است.
+                                    این بررسی به معنای تضمین حقوقی اصالت یا مالکیت سند نیست.
+                                </p>
+                            {% else %}
+                                <p>
+                                    وضعیت مدارک این فایل هنوز به‌عنوان بررسی‌شده ثبت نشده است.
+                                </p>
+                            {% endif %}
+
+                        </div>
+
+                    </section>
+
+
+                    {% if property.public_location %}
+
+                        <section class="property-detail-card">
+
+                            <div class="property-detail-heading">
+
+                                <span class="section-eyebrow">
+                                    موقعیت
+                                </span>
+
+                                <h2>
+                                    موقعیت عمومی ملک
+                                </h2>
+
+                            </div>
+
+
+                            <div class="property-detail-address">
+
+                                <strong>
+                                    {{ property.region.name }}
+                                </strong>
+
+                                <p>
+                                    {{ property.public_location }}
+                                </p>
+
+
+                                {% if property.is_exact_location_public and property.latitude and property.longitude %}
+                                    <p>
+                                        مختصات قابل نمایش:
+                                        {{ property.latitude }}،
+                                        {{ property.longitude }}
+                                    </p>
+                                {% endif %}
+
+                            </div>
+
+                        </section>
+
+                    {% endif %}
+
+                </div>
+
+
+                <aside class="property-detail-sidebar">
+
+                    <section class="property-detail-contact-card">
+
+                        <span class="property-detail-contact-card__eyebrow">
+                            مشاوره تخصصی
+                        </span>
+
+                        <h2>
+                            برای بررسی و بازدید این ملک تماس بگیرید
+                        </h2>
+
+
+                        {% if property.agent %}
+
+                            <div class="property-detail-agent">
+
+                                <div class="property-detail-agent__avatar">
+
+                                    {% if property.agent.photo %}
+                                        <img
+                                            src="{{ property.agent.photo.url }}"
+                                            alt="{{ property.agent.full_name }}"
+                                            loading="lazy"
+                                        >
+                                    {% else %}
+                                        {{ property.agent.full_name|first }}
+                                    {% endif %}
+
+                                </div>
+
+                                <div>
+                                    <small>
+                                        مشاور این ملک
+                                    </small>
+
+                                    <strong>
+                                        {{ property.agent.full_name }}
+                                    </strong>
+
+                                    {% if property.agent.job_title %}
+                                        <span>
+                                            {{ property.agent.job_title }}
+                                        </span>
+                                    {% endif %}
+                                </div>
+
+                            </div>
+
+
+                            {% if property.agent.phone %}
+                                <a
+                                    class="button property-detail-contact-button"
+                                    href="tel:{{ property.agent.phone }}"
+                                >
+                                    تماس با مشاور
+                                </a>
+                            {% endif %}
+
+
+                            {% if property.agent.rubika_url %}
+                                <a
+                                    class="button property-detail-contact-button"
+                                    href="{{ property.agent.rubika_url }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    ارتباط در روبیکا
+                                </a>
+                            {% endif %}
+
+
+                            {% if not property.agent.phone and not property.agent.rubika_url %}
+                                <p>
+                                    اطلاعات تماس این مشاور هنوز ثبت نشده است.
+                                </p>
+
+                                <a
+                                    class="button property-detail-contact-button"
+                                    href="{% url 'core:home' %}#agents"
+                                >
+                                    مشاهده مشاوران
+                                </a>
+                            {% endif %}
+
+                        {% else %}
+
+                            <p>
+                                این ملک هنوز به مشاور مشخصی اختصاص داده نشده است.
+                            </p>
+
+                            <a
+                                class="button property-detail-contact-button"
+                                href="{% url 'core:home' %}#agents"
+                            >
+                                مشاهده مشاوران کلارخانه
+                            </a>
+
+                        {% endif %}
+
+
+                        <a
+                            class="property-detail-back-link"
+                            href="{% url 'properties:list' %}"
+                        >
+                            بازگشت به فهرست املاک
+                        </a>
+
+                    </section>
+
+                </aside>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    {% if similar_properties %}
+
+        <section class="property-similar-section">
+            <div class="container">
+
+                <div class="property-similar-heading">
+
+                    <div>
+                        <span class="section-eyebrow">
+                            پیشنهادهای مشابه
+                        </span>
+
+                        <h2>
+                            املاک مرتبط
+                        </h2>
+                    </div>
+
+                    <a href="{% url 'properties:list' %}">
+                        مشاهده همه املاک
+                    </a>
+
+                </div>
+
+
+                <div class="property-similar-grid">
+
+                    {% for similar_property in similar_properties %}
+
+                        <article class="property-similar-card">
+
+                            <a
+                                class="property-similar-card__media"
+                                href="{% url 'properties:detail' similar_property.slug %}"
+                                aria-label="مشاهده {{ similar_property.title }}"
+                            >
+
+                                {% if similar_property.list_images %}
+
+                                    <img
+                                        src="{{ similar_property.list_images.0.image.url }}"
+                                        alt="{{ similar_property.list_images.0.alt_text|default:similar_property.title }}"
+                                        loading="lazy"
+                                        decoding="async"
+                                    >
+
+                                {% else %}
+
+                                    <div class="property-similar-card__placeholder">
+                                        تصویر ثبت نشده است
+                                    </div>
+
+                                {% endif %}
+
+                            </a>
+
+
+                            <div class="property-similar-card__content">
+
+                                <span>
+                                    {{ similar_property.region.name }}
+                                    /
+                                    {{ similar_property.property_type.name }}
+                                </span>
+
+
+                                <span>
+                                    {{ similar_property.get_transaction_type_display }}
+                                </span>
+
+
+                                <h3>
+                                    <a href="{% url 'properties:detail' similar_property.slug %}">
+                                        {{ similar_property.title }}
+                                    </a>
+                                </h3>
+
+
+                                <strong>
+
+                                    {% if similar_property.price_on_request %}
+
+                                        تماس بگیرید
+
+
+                                    {% elif similar_property.transaction_type == "sale" or similar_property.transaction_type == "pre_sale" %}
+
+                                        {% if similar_property.sale_price %}
+                                            {{ similar_property.sale_price|intcomma }}
+
+                                            {% if similar_property.currency_code == "IRT" %}
+                                                تومان
+                                            {% elif similar_property.currency_code == "USD" %}
+                                                دلار
+                                            {% elif similar_property.currency_code == "EUR" %}
+                                                یورو
+                                            {% elif similar_property.currency_code == "AED" %}
+                                                درهم
+                                            {% else %}
+                                                {{ similar_property.currency_code }}
+                                            {% endif %}
+                                        {% else %}
+                                            قیمت ثبت نشده
+                                        {% endif %}
+
+
+                                    {% elif similar_property.transaction_type == "full_mortgage" %}
+
+                                        {% if similar_property.deposit_amount %}
+                                            رهن کامل:
+                                            {{ similar_property.deposit_amount|intcomma }}
+
+                                            {% if similar_property.currency_code == "IRT" %}
+                                                تومان
+                                            {% elif similar_property.currency_code == "USD" %}
+                                                دلار
+                                            {% elif similar_property.currency_code == "EUR" %}
+                                                یورو
+                                            {% elif similar_property.currency_code == "AED" %}
+                                                درهم
+                                            {% else %}
+                                                {{ similar_property.currency_code }}
+                                            {% endif %}
+                                        {% else %}
+                                            مبلغ رهن ثبت نشده
+                                        {% endif %}
+
+
+                                    {% elif similar_property.transaction_type == "mortgage_rent" %}
+
+                                        {% if similar_property.deposit_amount %}
+                                            ودیعه:
+                                            {{ similar_property.deposit_amount|intcomma }}
+
+                                            {% if similar_property.currency_code == "IRT" %}
+                                                تومان
+                                            {% elif similar_property.currency_code == "USD" %}
+                                                دلار
+                                            {% elif similar_property.currency_code == "EUR" %}
+                                                یورو
+                                            {% elif similar_property.currency_code == "AED" %}
+                                                درهم
+                                            {% else %}
+                                                {{ similar_property.currency_code }}
+                                            {% endif %}
+                                        {% endif %}
+
+                                        {% if similar_property.deposit_amount and similar_property.monthly_rent %}
+                                            <br>
+                                        {% endif %}
+
+                                        {% if similar_property.monthly_rent %}
+                                            اجاره:
+                                            {{ similar_property.monthly_rent|intcomma }}
+
+                                            {% if similar_property.currency_code == "IRT" %}
+                                                تومان
+                                            {% elif similar_property.currency_code == "USD" %}
+                                                دلار
+                                            {% elif similar_property.currency_code == "EUR" %}
+                                                یورو
+                                            {% elif similar_property.currency_code == "AED" %}
+                                                درهم
+                                            {% else %}
+                                                {{ similar_property.currency_code }}
+                                            {% endif %}
+                                        {% endif %}
+
+                                        {% if not similar_property.deposit_amount and not similar_property.monthly_rent %}
+                                            قیمت ثبت نشده
+                                        {% endif %}
+
+
+                                    {% elif similar_property.transaction_type == "rent" %}
+
+                                        {% if similar_property.deposit_amount %}
+                                            ودیعه:
+                                            {{ similar_property.deposit_amount|intcomma }}
+
+                                            {% if similar_property.currency_code == "IRT" %}
+                                                تومان
+                                            {% elif similar_property.currency_code == "USD" %}
+                                                دلار
+                                            {% elif similar_property.currency_code == "EUR" %}
+                                                یورو
+                                            {% elif similar_property.currency_code == "AED" %}
+                                                درهم
+                                            {% else %}
+                                                {{ similar_property.currency_code }}
+                                            {% endif %}
+                                        {% endif %}
+
+                                        {% if similar_property.deposit_amount and similar_property.monthly_rent %}
+                                            <br>
+                                        {% endif %}
+
+                                        {% if similar_property.monthly_rent %}
+                                            اجاره:
+                                            {{ similar_property.monthly_rent|intcomma }}
+
+                                            {% if similar_property.currency_code == "IRT" %}
+                                                تومان
+                                            {% elif similar_property.currency_code == "USD" %}
+                                                دلار
+                                            {% elif similar_property.currency_code == "EUR" %}
+                                                یورو
+                                            {% elif similar_property.currency_code == "AED" %}
+                                                درهم
+                                            {% else %}
+                                                {{ similar_property.currency_code }}
+                                            {% endif %}
+                                        {% endif %}
+
+                                        {% if not similar_property.deposit_amount and not similar_property.monthly_rent %}
+                                            قیمت ثبت نشده
+                                        {% endif %}
+
+
+                                    {% else %}
+
+                                        قیمت ثبت نشده
+
+                                    {% endif %}
+
+                                </strong>
+
+                            </div>
+
+                        </article>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+        </section>
+
+    {% endif %}
+
+{% endblock %}

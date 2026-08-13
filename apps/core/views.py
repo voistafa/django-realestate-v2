@@ -2,20 +2,34 @@ from django.db.models import Prefetch
 from django.shortcuts import render
 
 from apps.agents.models import Agent
-from apps.projects.models import DevelopmentProject, ProjectImage
-from apps.properties.models import Property, PropertyImage
+from apps.projects.models import (
+    DevelopmentProject,
+    ProjectImage,
+)
+from apps.properties.models import (
+    Property,
+    PropertyImage,
+)
 
 
 def home(request):
+    """
+    Display featured and publicly available content.
+    """
     featured_properties = (
         Property.objects.filter(
-            status=Property.Status.PUBLISHED,
+            publication_status=Property.PublicationStatus.PUBLISHED,
+            availability_status__in=(
+                Property.AvailabilityStatus.AVAILABLE,
+                Property.AvailabilityStatus.RESERVED,
+            ),
             is_featured=True,
         )
         .select_related(
             "property_type",
             "region",
             "region__city",
+            "project",
             "agent",
         )
         .prefetch_related(
@@ -27,15 +41,20 @@ def home(request):
                     "created_at",
                 ),
                 to_attr="home_images",
-            )
+            ),
         )
-        [:6]
+        .order_by(
+            "-published_at",
+            "-created_at",
+        )[:6]
     )
 
     featured_projects = (
         DevelopmentProject.objects.filter(
+            publication_status=(
+                DevelopmentProject.PublicationStatus.PUBLISHED
+            ),
             is_featured=True,
-            published_at__isnull=False,
         )
         .select_related(
             "region",
@@ -51,15 +70,27 @@ def home(request):
                     "created_at",
                 ),
                 to_attr="home_images",
-            )
+            ),
         )
-        [:4]
+        .order_by(
+            "-published_at",
+            "-created_at",
+        )[:4]
     )
 
-    featured_agents = Agent.objects.filter(
-        is_active=True,
-        is_featured=True,
-    )[:4]
+    featured_agents = (
+        Agent.objects.filter(
+            is_active=True,
+            is_featured=True,
+        )
+        .prefetch_related(
+            "service_regions",
+        )
+        .order_by(
+            "display_order",
+            "full_name",
+        )[:4]
+    )
 
     context = {
         "featured_properties": featured_properties,
@@ -67,4 +98,8 @@ def home(request):
         "featured_agents": featured_agents,
     }
 
-    return render(request, "core/home.html", context)
+    return render(
+        request,
+        "core/home.html",
+        context,
+    )

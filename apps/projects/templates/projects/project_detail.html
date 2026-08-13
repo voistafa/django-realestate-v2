@@ -1,0 +1,579 @@
+{% extends "base.html" %}
+{% load static humanize %}
+
+
+{% block title %}
+    {{ project.title }} | کلارخانه
+{% endblock %}
+
+
+{% block meta_description %}
+    {{ project.short_description|default:project.description|striptags|truncatechars:160 }}
+{% endblock %}
+
+
+{% block extra_css %}
+    <link
+        rel="stylesheet"
+        href="{% static 'projects/css/project-detail.css' %}"
+    >
+{% endblock %}
+
+
+{% block content %}
+
+    <section class="project-detail-hero">
+        <div class="container">
+
+            <nav
+                class="project-detail-breadcrumb"
+                aria-label="مسیر صفحه"
+            >
+                <a href="{% url 'core:home' %}">
+                    صفحه اصلی
+                </a>
+
+                <span aria-hidden="true">/</span>
+
+                <a href="{% url 'projects:list' %}">
+                    پروژه‌ها
+                </a>
+
+                <span aria-hidden="true">/</span>
+
+                <span aria-current="page">
+                    {{ project.title }}
+                </span>
+            </nav>
+
+
+            <div class="project-detail-hero__content">
+
+                <div class="project-detail-hero__information">
+
+                    <div class="project-detail-hero__badges">
+
+                        <span class="project-detail-badge">
+                            {{ project.get_construction_status_display }}
+                        </span>
+
+                        {% if project.is_featured %}
+                            <span class="project-detail-badge project-detail-badge--featured">
+                                پروژه ویژه
+                            </span>
+                        {% endif %}
+
+                    </div>
+
+
+                    <h1>
+                        {{ project.title }}
+                    </h1>
+
+
+                    <div class="project-detail-hero__meta">
+
+                        <span>
+                            {{ project.region.name }}
+                        </span>
+
+                        <span aria-hidden="true">•</span>
+
+                        <span>
+                            {{ project.region.city.name }}
+                        </span>
+
+                        <span aria-hidden="true">•</span>
+
+                        <span>
+                            کد پروژه:
+                            {{ project.reference_code }}
+                        </span>
+
+                    </div>
+
+
+                    {% if project.short_description %}
+                        <p class="project-detail-hero__description">
+                            {{ project.short_description }}
+                        </p>
+                    {% endif %}
+
+                </div>
+
+
+                <div class="project-detail-price">
+
+                    {% if project.price_on_request %}
+
+                        <small>
+                            قیمت پروژه
+                        </small>
+
+                        <strong>
+                            قیمت پس از مشاوره
+                        </strong>
+
+                    {% elif project.starting_price %}
+
+                        <small>
+                            شروع قیمت از
+                        </small>
+
+                        <strong>
+                            {{ project.starting_price|intcomma }}
+                        </strong>
+
+                        <span>
+                            {% if project.currency_code == "IRT" %}
+                                تومان
+                            {% else %}
+                                {{ project.get_currency_code_display }}
+                            {% endif %}
+                        </span>
+
+                    {% else %}
+
+                        <small>
+                            قیمت پروژه
+                        </small>
+
+                        <strong>
+                            قیمت ثبت نشده
+                        </strong>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <section class="project-detail-section">
+        <div class="container">
+
+
+            <div class="project-detail-gallery">
+
+                {% if project_images %}
+
+                    <div class="project-detail-gallery__main">
+                        <img
+                            src="{{ project_images.0.image.url }}"
+                            alt="{{ project_images.0.alt_text|default:project.title }}"
+                        >
+                    </div>
+
+
+                    {% if project_images|length > 1 %}
+
+                        <div class="project-detail-gallery__thumbnails">
+
+                            {% for project_image in project_images|slice:"1:5" %}
+
+                                <figure>
+                                    <img
+                                        src="{{ project_image.image.url }}"
+                                        alt="{{ project_image.alt_text|default:project.title }}"
+                                        loading="lazy"
+                                        decoding="async"
+                                    >
+                                </figure>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% endif %}
+
+                {% else %}
+
+                    <div class="project-detail-gallery__placeholder">
+
+                        <strong>
+                            کلارخانه
+                        </strong>
+
+                        <span>
+                            هنوز تصویری برای این پروژه ثبت نشده است.
+                        </span>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="project-detail-layout">
+
+                <div class="project-detail-main">
+
+
+                    <section class="project-detail-card">
+
+                        <div class="project-detail-heading">
+
+                            <span class="section-eyebrow">
+                                اطلاعات پروژه
+                            </span>
+
+                            <h2>
+                                مشخصات اصلی
+                            </h2>
+
+                        </div>
+
+
+                        <div class="project-detail-specifications">
+
+                            <div class="project-detail-specification">
+                                <small>
+                                    وضعیت ساخت
+                                </small>
+
+                                <strong>
+                                    {{ project.get_construction_status_display }}
+                                </strong>
+                            </div>
+
+
+                            <div class="project-detail-specification">
+                                <small>
+                                    پیشرفت پروژه
+                                </small>
+
+                                <strong>
+                                    {{ project.completion_percentage }}٪
+                                </strong>
+                            </div>
+
+
+                            {% if project.total_units %}
+                                <div class="project-detail-specification">
+                                    <small>
+                                        تعداد کل واحدها
+                                    </small>
+
+                                    <strong>
+                                        {{ project.total_units|intcomma }}
+                                    </strong>
+                                </div>
+                            {% endif %}
+
+
+                            {% if project.available_units != None %}
+                                <div class="project-detail-specification">
+                                    <small>
+                                        واحدهای موجود
+                                    </small>
+
+                                    <strong>
+                                        {{ project.available_units|intcomma }}
+                                    </strong>
+                                </div>
+                            {% endif %}
+
+
+                            {% if project.developer_name %}
+                                <div class="project-detail-specification">
+                                    <small>
+                                        سازنده یا توسعه‌دهنده
+                                    </small>
+
+                                    <strong>
+                                        {{ project.developer_name }}
+                                    </strong>
+                                </div>
+                            {% endif %}
+
+
+                            {% if project.start_date %}
+                                <div class="project-detail-specification">
+                                    <small>
+                                        تاریخ شروع
+                                    </small>
+
+                                    <strong>
+                                        {{ project.start_date|date:"Y/m/d" }}
+                                    </strong>
+                                </div>
+                            {% endif %}
+
+
+                            {% if project.expected_completion_date %}
+                                <div class="project-detail-specification">
+                                    <small>
+                                        تاریخ تقریبی تحویل
+                                    </small>
+
+                                    <strong>
+                                        {{ project.expected_completion_date|date:"Y/m/d" }}
+                                    </strong>
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="project-detail-progress">
+
+                            <div class="project-detail-progress__heading">
+
+                                <span>
+                                    میزان پیشرفت پروژه
+                                </span>
+
+                                <strong>
+                                    {{ project.completion_percentage }}٪
+                                </strong>
+
+                            </div>
+
+                            <div class="project-detail-progress__track">
+                                <span
+                                    style="width: {{ project.completion_percentage }}%;"
+                                ></span>
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <section class="project-detail-card">
+
+                        <div class="project-detail-heading">
+
+                            <span class="section-eyebrow">
+                                معرفی کامل
+                            </span>
+
+                            <h2>
+                                درباره پروژه
+                            </h2>
+
+                        </div>
+
+
+                        <div class="project-detail-description">
+                            {{ project.description|linebreaks }}
+                        </div>
+
+                    </section>
+
+
+                    {% if project_features %}
+
+                        <section class="project-detail-card">
+
+                            <div class="project-detail-heading">
+
+                                <span class="section-eyebrow">
+                                    امکانات
+                                </span>
+
+                                <h2>
+                                    امکانات پروژه
+                                </h2>
+
+                            </div>
+
+
+                            <div class="project-detail-features">
+
+                                {% for feature in project_features %}
+
+                                    <div class="project-detail-feature">
+                                        <span>
+                                            {{ feature.name }}
+                                        </span>
+                                    </div>
+
+                                {% endfor %}
+
+                            </div>
+
+                        </section>
+
+                    {% endif %}
+
+
+                    {% if project.public_location %}
+
+                        <section class="project-detail-card">
+
+                            <div class="project-detail-heading">
+
+                                <span class="section-eyebrow">
+                                    موقعیت
+                                </span>
+
+                                <h2>
+                                    موقعیت عمومی پروژه
+                                </h2>
+
+                            </div>
+
+
+                            <div class="project-detail-address">
+
+                                <strong>
+                                    {{ project.region.name }}،
+                                    {{ project.region.city.name }}
+                                </strong>
+
+                                <p>
+                                    {{ project.public_location }}
+                                </p>
+
+
+                                {% if project.is_exact_location_public and project.latitude and project.longitude %}
+
+                                    <p>
+                                        مختصات قابل نمایش:
+                                        {{ project.latitude }}،
+                                        {{ project.longitude }}
+                                    </p>
+
+                                {% endif %}
+
+                            </div>
+
+                        </section>
+
+                    {% endif %}
+
+                </div>
+
+
+                <aside class="project-detail-sidebar">
+
+                    <section class="project-detail-contact-card">
+
+                        <span class="project-detail-contact-card__eyebrow">
+                            مشاوره پروژه
+                        </span>
+
+                        <h2>
+                            برای بررسی شرایط این پروژه تماس بگیرید
+                        </h2>
+
+
+                        {% if project.agent %}
+
+                            <div class="project-detail-agent">
+
+                                <div class="project-detail-agent__avatar">
+
+                                    {% if project.agent.photo %}
+                                        <img
+                                            src="{{ project.agent.photo.url }}"
+                                            alt="{{ project.agent.full_name }}"
+                                            loading="lazy"
+                                        >
+                                    {% else %}
+                                        {{ project.agent.full_name|first }}
+                                    {% endif %}
+
+                                </div>
+
+
+                                <div>
+
+                                    <small>
+                                        مشاور این پروژه
+                                    </small>
+
+                                    <strong>
+                                        {{ project.agent.full_name }}
+                                    </strong>
+
+                                    {% if project.agent.job_title %}
+                                        <span>
+                                            {{ project.agent.job_title }}
+                                        </span>
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+
+                            {% if project.agent.phone %}
+
+                                <a
+                                    class="button project-detail-contact-button"
+                                    href="tel:{{ project.agent.phone }}"
+                                >
+                                    تماس با مشاور
+                                </a>
+
+                            {% endif %}
+
+
+                            {% if project.agent.rubika_url %}
+
+                                <a
+                                    class="button project-detail-contact-button"
+                                    href="{{ project.agent.rubika_url }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    ارتباط در روبیکا
+                                </a>
+
+                            {% endif %}
+
+
+                            {% if not project.agent.phone and not project.agent.rubika_url %}
+
+                                <p>
+                                    اطلاعات تماس این مشاور هنوز ثبت نشده است.
+                                </p>
+
+                                <a
+                                    class="button project-detail-contact-button"
+                                    href="{% url 'core:home' %}#agents"
+                                >
+                                    مشاهده مشاوران
+                                </a>
+
+                            {% endif %}
+
+                        {% else %}
+
+                            <p>
+                                این پروژه هنوز به مشاور مشخصی اختصاص داده نشده است.
+                            </p>
+
+                            <a
+                                class="button project-detail-contact-button"
+                                href="{% url 'core:home' %}#agents"
+                            >
+                                مشاهده مشاوران کلارخانه
+                            </a>
+
+                        {% endif %}
+
+
+                        <a
+                            class="project-detail-back-link"
+                            href="{% url 'projects:list' %}"
+                        >
+                            بازگشت به فهرست پروژه‌ها
+                        </a>
+
+                    </section>
+
+                </aside>
+
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}

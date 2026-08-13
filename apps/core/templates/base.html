@@ -2,6 +2,7 @@
 
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
 
@@ -15,11 +16,17 @@
         content="{% block meta_description %}کلارخانه؛ معرفی املاک، ویلاها و پروژه‌های ساختمانی منتخب در کلاردشت{% endblock %}"
     >
 
-    <meta name="theme-color" content="#176b32">
+    <meta
+        name="theme-color"
+        content="#176b32"
+    >
 
     <title>
-        {% block title %}کلارخانه | املاک کلاردشت{% endblock %}
+        {% block title %}
+            کلارخانه | املاک کلاردشت
+        {% endblock %}
     </title>
+
 
     <link
         rel="icon"
@@ -32,25 +39,45 @@
         href="{% static 'core/images/favicon.png' %}"
     >
 
+
     <link
         rel="stylesheet"
-        href="{% static 'core/css/main.css' %}"
+        href="{% static 'core/css/main.css' %}?v=20260802-6"
     >
 
-    {% block extra_css %}{% endblock %}
+
+    {% block extra_css %}
+    {% endblock %}
+
 </head>
 
+
 <body>
+
     {% include "includes/header.html" %}
 
-    <main>
-        {% block content %}{% endblock %}
+
+    <main id="main-content">
+        {% block content %}
+        {% endblock %}
     </main>
 
+
     <footer>
-        {% block footer %}{% endblock %}
+        {% block footer %}
+        {% endblock %}
     </footer>
 
-    {% block extra_js %}{% endblock %}
+
+    <script
+        src="{% static 'core/js/navigation.js' %}?v=20260802-6"
+        defer
+    ></script>
+
+
+    {% block extra_js %}
+    {% endblock %}
+
 </body>
+
 </html>
