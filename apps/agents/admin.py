@@ -3,9 +3,13 @@ from django.utils import timezone
 
 from .models import Agent
 
+from apps.core.admin_fields import RubikaAdminMixin
 
 @admin.register(Agent)
-class AgentAdmin(admin.ModelAdmin):
+class AgentAdmin(
+    RubikaAdminMixin,
+    admin.ModelAdmin,
+):
     list_display = (
         "full_name",
         "job_title",

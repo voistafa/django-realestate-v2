@@ -145,6 +145,7 @@ class DevelopmentProjectAdminForm(forms.ModelForm):
         required=False,
         widget=AdminJalaliDateWidget(
             attrs={
+                "data-jdp": "",
                 "readonly": "readonly",
                 "autocomplete": "off",
                 "inputmode": "none",
@@ -157,6 +158,7 @@ class DevelopmentProjectAdminForm(forms.ModelForm):
         required=False,
         widget=AdminJalaliDateWidget(
             attrs={
+                "data-jdp": "",
                 "readonly": "readonly",
                 "autocomplete": "off",
                 "inputmode": "none",
@@ -178,12 +180,8 @@ class DevelopmentProjectAdminForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         features_field = self.fields["features"]
-
-        # برچسب بیرونی فرم:
-        # Django دونقطه را خودکار به انتهای آن اضافه می‌کند.
         features_field.label = "امکانات پروژه"
 
-        # عنوان داخلی ویجت انتخاب امکانات:
         features_widget = features_field.widget
 
         if hasattr(features_widget, "widget"):
@@ -192,17 +190,17 @@ class DevelopmentProjectAdminForm(forms.ModelForm):
         if hasattr(features_widget, "verbose_name"):
             features_widget.verbose_name = "امکانات پروژه"
 
-        published_field = self.fields[
-            "published_at"
-        ]
+        published_field = self.fields["published_at"]
         published_widget = published_field.widget
 
         if hasattr(published_field, "fields"):
             subfields = list(published_field.fields)
+
             subfields[1] = PersianFriendlyTimeField(
                 required=False,
                 input_formats=("%H:%M",),
             )
+
             published_field.fields = tuple(subfields)
 
         if hasattr(published_widget, "widgets"):
@@ -213,11 +211,14 @@ class DevelopmentProjectAdminForm(forms.ModelForm):
                 "class",
                 "",
             )
+
             date_widget.attrs.update(
                 {
                     "class": (
-                        f"{date_classes} project-jalali-date-input"
+                        f"{date_classes} "
+                        "project-jalali-date-input"
                     ).strip(),
+                    "data-jdp": "",
                     "readonly": "readonly",
                     "autocomplete": "off",
                     "inputmode": "none",
@@ -228,12 +229,15 @@ class DevelopmentProjectAdminForm(forms.ModelForm):
                 "class",
                 "",
             )
+
             time_widget.input_type = "text"
             time_widget.format = "%H:%M"
+
             time_widget.attrs.update(
                 {
                     "class": (
-                        f"{time_classes} project-time-input"
+                        f"{time_classes} "
+                        "project-time-input"
                     ).strip(),
                     "placeholder": "--:--",
                     "maxlength": "5",
@@ -263,7 +267,8 @@ class DevelopmentProjectAdminForm(forms.ModelForm):
         )
 
         if (
-            status == DevelopmentProject.PublicationStatus.PUBLISHED
+            status
+            == DevelopmentProject.PublicationStatus.PUBLISHED
             and (
                 self.instance.pk is None
                 or self.instance.publication_status
@@ -608,6 +613,7 @@ class DevelopmentProjectAdmin(admin.ModelAdmin):
             try:
                 project.publish()
                 published_count += 1
+
             except ValidationError:
                 failed_projects.append(
                     project.reference_code,
@@ -698,15 +704,18 @@ class DevelopmentProjectAdmin(admin.ModelAdmin):
                     "projects/admin/"
                     "project_admin_refinements_v2.css"
                 ),
+                (
+                    "projects/admin/"
+                    "project_currency_select2.css"
+                ),
             ),
         }
 
         js = (
-            "admin/js/django_jalali.min.js",
-            (
-                "projects/admin/"
-                "project_admin_refinements_v3.js"
-            ),
+            "projects/admin/project_time_input.js",
+            "projects/admin/project_coordinates_input.js",
+            "projects/admin/project_price_input.js",
+            "projects/admin/project_currency_select2.js",
         )
 
 

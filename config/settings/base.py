@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "apps.properties.apps.PropertiesConfig",
     "apps.projects.apps.ProjectsConfig",
     "apps.agents.apps.AgentsConfig",
+    "apps.organization.apps.OrganizationConfig",
     "apps.inquiries.apps.InquiriesConfig",
 ]
 

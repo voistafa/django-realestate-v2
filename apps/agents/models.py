@@ -65,11 +65,12 @@ class Agent(TimeStampedModel):
         verbose_name="شماره تماس",
     )
 
-    rubika_url = models.URLField(
-        blank=True,
-        verbose_name="لینک روبیکا",
-        help_text="مثال: https://rubika.ir/username",
-    )
+    rubika_url = models.CharField(
+    max_length=255,
+    blank=True,
+    verbose_name="روبیکا",
+    help_text="آیدی یا لینک روبیکا را وارد کنید.",
+)
 
     email = models.EmailField(
         blank=True,

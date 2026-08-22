@@ -1,0 +1,93 @@
+/* فیلد واحد پول */
+.project-currency-select2 {
+    direction: rtl !important;
+    vertical-align: middle !important;
+}
+
+.project-currency-select2
+.select2-selection--single {
+    display: flex !important;
+    align-items: center !important;
+
+    padding: 0 10px !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.project-currency-select2
+.select2-selection__rendered {
+    flex: 1 !important;
+
+    padding: 0 4px 0 30px !important;
+
+    line-height: normal !important;
+
+    text-align: right !important;
+
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+}
+
+/* فلش */
+.project-currency-select2
+.select2-selection__arrow {
+    position: absolute !important;
+
+    top: 50% !important;
+    left: 8px !important;
+    right: auto !important;
+
+    width: 20px !important;
+    height: 20px !important;
+
+    transform: translateY(-50%) !important;
+}
+
+/* منوی بازشونده */
+.project-currency-select2-dropdown {
+    background: var(--body-bg) !important;
+
+    border: 1px solid var(--border-color) !important;
+    border-radius: 4px !important;
+
+    overflow: hidden !important;
+
+    direction: rtl !important;
+}
+
+/* گزینه‌ها */
+.project-currency-select2-dropdown
+.select2-results__option {
+    padding: 9px 12px !important;
+
+    background: var(--body-bg) !important;
+    color: var(--body-fg) !important;
+
+    text-align: right !important;
+
+    font-family: inherit !important;
+    font-size: inherit !important;
+}
+
+/* گزینه انتخاب‌شده */
+.project-currency-select2-dropdown
+.select2-results__option[aria-selected="true"] {
+    background: var(--darkened-bg) !important;
+    color: var(--body-fg) !important;
+}
+
+/* گزینه زیر موس */
+.project-currency-select2-dropdown
+.select2-results__option--highlighted[aria-selected] {
+    background: var(--primary) !important;
+    color: #ffffff !important;
+}
+
+/* حذف ظاهر سفید پیش‌فرض Select2 */
+.project-currency-select2
+.select2-selection--single:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}

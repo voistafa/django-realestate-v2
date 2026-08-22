@@ -1,0 +1,231 @@
+/* فقط Action bar صفحات Changelist */
+
+#changelist-form .actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex-wrap: wrap !important;
+
+    overflow: visible !important;
+}
+
+
+/* اقدام: + فیلد */
+
+#changelist-form .actions > label {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+
+    height: 38px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    font-family: var(--admin-font-family) !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    line-height: 1 !important;
+}
+
+
+/* Wrapper */
+
+.admin-action-picker {
+    position: relative;
+
+    display: inline-block;
+
+    width: 360px;
+    height: 38px;
+
+    margin: 0;
+    padding: 0;
+
+    font-family: var(--admin-font-family) !important;
+}
+
+
+/* فیلد بسته */
+
+.admin-action-picker__trigger {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+
+    width: 100% !important;
+    height: 38px !important;
+    min-height: 38px !important;
+
+    margin: 0 !important;
+    padding: 0 10px !important;
+
+    box-sizing: border-box !important;
+
+    border: 1px solid var(--border-color) !important;
+    border-radius: 4px !important;
+
+    background: var(--darkened-bg) !important;
+    color: var(--body-fg) !important;
+
+    font-family: var(--admin-font-family) !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    line-height: 1 !important;
+
+    cursor: pointer !important;
+
+    box-shadow: none !important;
+}
+
+
+.admin-action-picker__trigger:hover {
+    border-color: var(--body-quiet-color) !important;
+}
+
+
+.admin-action-picker__trigger:focus-visible {
+    outline: 2px solid var(--accent) !important;
+    outline-offset: 1px !important;
+}
+
+
+/* متن */
+
+.admin-action-picker__text {
+    flex: 1 1 auto;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    text-align: right;
+
+    font-family: var(--admin-font-family) !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    line-height: 1 !important;
+}
+
+
+/* فلش */
+
+.admin-action-picker__arrow {
+    flex: 0 0 auto;
+
+    margin-right: 10px;
+
+    color: var(--body-quiet-color);
+
+    font-family: var(--admin-font-family) !important;
+    font-size: 16px !important;
+    line-height: 1 !important;
+}
+
+
+/* منوی بازشونده */
+
+.admin-action-picker__menu {
+    position: absolute;
+
+    z-index: 10000;
+
+    top: calc(100% + 3px);
+    right: 0;
+
+    width: 100%;
+
+    margin: 0;
+    padding: 4px;
+
+    box-sizing: border-box;
+
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+
+    background: var(--body-bg);
+
+    box-shadow:
+        0 6px 18px
+        rgba(0, 0, 0, 0.30);
+}
+
+
+.admin-action-picker__menu[hidden] {
+    display: none !important;
+}
+
+
+/* گزینه‌ها */
+
+.admin-action-picker__option {
+    display: flex !important;
+    align-items: center !important;
+
+    width: 100% !important;
+    min-height: 38px !important;
+
+    margin: 0 !important;
+    padding: 7px 10px !important;
+
+    box-sizing: border-box !important;
+
+    border: 0 !important;
+    border-radius: 3px !important;
+
+    background: transparent !important;
+    color: var(--body-fg) !important;
+
+    font-family: var(--admin-font-family) !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    line-height: 1.8 !important;
+
+    text-align: right !important;
+
+    cursor: pointer !important;
+
+    box-shadow: none !important;
+}
+
+
+.admin-action-picker__option:hover,
+.admin-action-picker__option:focus-visible {
+    background: var(--selected-row) !important;
+
+    outline: none !important;
+}
+
+
+/* دکمه برو */
+
+#changelist-form .actions button[name="index"] {
+    align-self: center !important;
+
+    width: 42px !important;
+    min-width: 42px !important;
+
+    height: 38px !important;
+    min-height: 38px !important;
+
+    margin: 0 !important;
+}
+
+
+/* شمارنده */
+
+#changelist-form .actions .action-counter {
+    display: inline-flex !important;
+    align-items: center !important;
+
+    height: 38px !important;
+    min-height: 38px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    font-family: var(--admin-font-family) !important;
+    font-size: 15px !important;
+    line-height: 1 !important;
+}

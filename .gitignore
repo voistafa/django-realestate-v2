@@ -232,3 +232,10 @@ fix_project_features_widget.py
 fix_project_selector_final.py
 patch_project_selector_observer.py
 repair_project_admin_ui_v2.py
+# Local SQLite database backups
+db.sqlite3-*
+db.sqlite3.*
+*.sqlite3-backup
+*.sqlite3.bak
+# Local source-code backups
+apps/core/management/commands/seed_demo_data.py.bak

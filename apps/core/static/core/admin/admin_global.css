@@ -1,6 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap");
 
-/* Global Django admin typography */
+
+/* =========================================================
+   Global Django Admin Typography
+   ========================================================= */
+
 :root {
     --admin-font-family:
         "Vazirmatn",
@@ -20,7 +24,11 @@ body {
     line-height: 1.85 !important;
 }
 
-/* Form controls */
+
+/* =========================================================
+   Form Controls
+   ========================================================= */
+
 button,
 input,
 select,
@@ -46,7 +54,11 @@ textarea {
     line-height: 1.9 !important;
 }
 
-/* Labels and field texts */
+
+/* =========================================================
+   Labels and Field Texts
+   ========================================================= */
+
 label,
 .form-row label,
 .flex-container label,
@@ -73,7 +85,11 @@ label,
     line-height: 1.8 !important;
 }
 
-/* Main headings */
+
+/* =========================================================
+   Main Headings
+   ========================================================= */
+
 h1 {
     font-family: var(--admin-font-family) !important;
     font-size: 25px !important;
@@ -96,7 +112,11 @@ h4 {
     font-weight: 600 !important;
 }
 
-/* Header and navigation */
+
+/* =========================================================
+   Header and Navigation
+   ========================================================= */
+
 #header,
 #branding,
 #user-tools,
@@ -122,7 +142,11 @@ h4 {
     line-height: 1.8 !important;
 }
 
-/* Section headings */
+
+/* =========================================================
+   Section Headings
+   ========================================================= */
+
 .module h2,
 .module caption,
 .inline-group h2,
@@ -134,7 +158,11 @@ h4 {
     font-weight: 600 !important;
 }
 
-/* Sidebar */
+
+/* =========================================================
+   Sidebar
+   ========================================================= */
+
 #nav-sidebar,
 #nav-sidebar a,
 #nav-sidebar th,
@@ -144,7 +172,11 @@ h4 {
     line-height: 1.8 !important;
 }
 
-/* Tables */
+
+/* =========================================================
+   Tables
+   ========================================================= */
+
 table,
 th,
 td,
@@ -163,7 +195,11 @@ table td {
     line-height: 1.8 !important;
 }
 
-/* Buttons */
+
+/* =========================================================
+   Buttons
+   ========================================================= */
+
 .button,
 input[type="submit"],
 input[type="button"],
@@ -176,7 +212,11 @@ input[type="button"],
     padding-bottom: 9px !important;
 }
 
-/* Filter horizontal widgets */
+
+/* =========================================================
+   Filter Horizontal Widgets
+   ========================================================= */
+
 .selector,
 .selector select,
 .selector input,
@@ -195,7 +235,9 @@ input[type="button"],
     font-size: 15px !important;
 }
 
+
 /* Selector action spacing fix */
+
 .selector .selector-chooseall,
 .selector .selector-clearall {
     display: flex !important;
@@ -228,7 +270,11 @@ input[type="button"],
     padding-bottom: 8px;
 }
 
-/* Unify admin select and option typography */
+
+/* =========================================================
+   Select Typography
+   ========================================================= */
+
 select,
 select option,
 select optgroup {
@@ -243,7 +289,11 @@ select option {
     padding: 8px 12px;
 }
 
-/* Region Select2 typography */
+
+/* =========================================================
+   Select2 Typography
+   ========================================================= */
+
 .select2-container,
 .select2-container .select2-selection,
 .select2-container .select2-selection__rendered,
@@ -258,4 +308,137 @@ select option {
 .select2-results__option {
     line-height: 1.9 !important;
     padding: 8px 12px !important;
+}
+/* =========================================================
+   Admin Typography Size Refinement
+   ========================================================= */
+
+body {
+    font-size: 18px !important;
+}
+
+/* فرم‌ها */
+button,
+input,
+select,
+textarea,
+.button,
+a.button,
+input[type="submit"],
+input[type="button"],
+.object-tools a {
+    font-size: 18px !important;
+}
+
+/* لیبل‌ها */
+label,
+.form-row label,
+.flex-container label,
+.vCheckboxLabel {
+    font-size: 18px !important;
+}
+
+/* متن راهنما */
+.help,
+.helptext,
+.form-row p.help {
+    font-size: 16px !important;
+    line-height: 1.8 !important;
+}
+
+/* خطاها و پیام‌ها */
+.errorlist,
+.errornote,
+.messagelist {
+    font-size: 17px !important;
+}
+
+/* عنوان صفحات */
+h1 {
+    font-size: 29px !important;
+}
+
+h2 {
+    font-size: 24px !important;
+}
+
+h3,
+h4 {
+    font-size: 20px !important;
+}
+
+/* هدر */
+#branding h1,
+#branding h1 a,
+#site-name,
+#site-name a {
+    font-size: 26px !important;
+}
+
+#user-tools {
+    font-size: 16px !important;
+}
+
+.breadcrumbs {
+    font-size: 17px !important;
+}
+
+/* عنوان بخش‌ها */
+.module h2,
+.module caption,
+.inline-group h2,
+#nav-sidebar .module th,
+#nav-sidebar .module caption {
+    font-size: 19px !important;
+}
+
+/* منوی کناری */
+#nav-sidebar,
+#nav-sidebar a,
+#nav-sidebar th,
+#nav-sidebar td {
+    font-size: 17px !important;
+    line-height: 1.6 !important;
+}
+
+/* جدول‌ها */
+table th {
+    font-size: 17px !important;
+}
+
+table td,
+.paginator {
+    font-size: 17px !important;
+}
+
+/* دکمه‌ها */
+.button,
+input[type="submit"],
+input[type="button"],
+.submit-row input,
+.object-tools a {
+    font-size: 17px !important;
+}
+
+/* Selector */
+.selector h2 {
+    font-size: 18px !important;
+}
+
+.selector select,
+.selector input {
+    font-size: 17px !important;
+}
+
+/* Select و Select2 */
+select,
+select option,
+select optgroup,
+.select2-container,
+.select2-container .select2-selection,
+.select2-container .select2-selection__rendered,
+.select2-dropdown,
+.select2-results__option,
+.select2-search__field {
+    font-size: 18px !important;
 }

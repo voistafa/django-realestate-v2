@@ -1,0 +1,33 @@
+{% extends "admin/actions.html" %}
+{% load i18n %}
+
+{% block actions-submit %}
+<button
+    type="submit"
+    class="button"
+    title="{% translate 'Run the selected action' %}"
+    name="index"
+    value="{{ action_index|default:0 }}"
+    style="
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 42px !important;
+        min-width: 42px !important;
+        height: 38px !important;
+        min-height: 38px !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+        border: 1px solid var(--border-color) !important;
+        border-radius: 4px !important;
+        background: var(--darkened-bg) !important;
+        color: var(--body-fg) !important;
+        font: inherit !important;
+        line-height: 1 !important;
+        cursor: pointer !important;
+    "
+>
+    {% translate "Go" %}
+</button>
+{% endblock %}

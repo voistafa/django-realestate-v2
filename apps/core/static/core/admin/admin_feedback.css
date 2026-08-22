@@ -1,0 +1,234 @@
+/* =========================================================
+   Global Django Admin Feedback System
+   ========================================================= */
+
+.admin-feedback,
+.errornote,
+.messagelist li {
+    position: relative;
+
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+
+    margin: 0 0 18px !important;
+    padding: 14px 16px !important;
+
+    border: 1px solid transparent !important;
+    border-inline-start-width: 4px !important;
+    border-radius: 10px !important;
+
+    background-image: none !important;
+
+    font-family: var(--admin-font-family) !important;
+    font-size: 17px !important;
+    font-weight: 600 !important;
+    line-height: 1.9 !important;
+
+    direction: rtl !important;
+    text-align: right !important;
+
+    box-sizing: border-box;
+}
+
+/* -------------------------
+   Error
+   ------------------------- */
+
+.errornote,
+.admin-feedback--error,
+.messagelist li.error {
+    color: #ffb4ab !important;
+    background: rgba(217, 45, 32, 0.10) !important;
+    border-color: rgba(217, 45, 32, 0.45) !important;
+    border-inline-start-color: #d92d20 !important;
+}
+
+.errornote::before,
+.admin-feedback--error::before,
+.messagelist li.error::before {
+    content: "!";
+
+    flex: 0 0 24px;
+
+    display: grid;
+    place-items: center;
+
+    width: 24px;
+    height: 24px;
+
+    margin-top: 2px;
+
+    border-radius: 50%;
+
+    color: #ffffff;
+    background: #d92d20;
+
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+/* -------------------------
+   Warning
+   ------------------------- */
+
+.admin-feedback--warning,
+.messagelist li.warning {
+    color: #ffd89a !important;
+    background: rgba(247, 144, 9, 0.10) !important;
+    border-color: rgba(247, 144, 9, 0.45) !important;
+    border-inline-start-color: #f79009 !important;
+}
+
+.admin-feedback--warning::before,
+.messagelist li.warning::before {
+    content: "!";
+
+    flex: 0 0 24px;
+
+    display: grid;
+    place-items: center;
+
+    width: 24px;
+    height: 24px;
+
+    margin-top: 2px;
+
+    border-radius: 50%;
+
+    color: #111111;
+    background: #f79009;
+
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+/* -------------------------
+   Success
+   ------------------------- */
+
+.admin-feedback--success,
+.messagelist li.success {
+    color: #9be9bd !important;
+    background: rgba(18, 183, 106, 0.10) !important;
+    border-color: rgba(18, 183, 106, 0.45) !important;
+    border-inline-start-color: #12b76a !important;
+}
+
+.admin-feedback--success::before,
+.messagelist li.success::before {
+    content: "✓";
+
+    flex: 0 0 24px;
+
+    display: grid;
+    place-items: center;
+
+    width: 24px;
+    height: 24px;
+
+    margin-top: 2px;
+
+    border-radius: 50%;
+
+    color: #ffffff;
+    background: #12b76a;
+
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+/* -------------------------
+   Information
+   ------------------------- */
+
+.admin-feedback--info,
+.messagelist li.info {
+    color: #b2ddff !important;
+    background: rgba(46, 144, 250, 0.10) !important;
+    border-color: rgba(46, 144, 250, 0.45) !important;
+    border-inline-start-color: #2e90fa !important;
+}
+
+.admin-feedback--info::before,
+.messagelist li.info::before {
+    content: "i";
+
+    flex: 0 0 24px;
+
+    display: grid;
+    place-items: center;
+
+    width: 24px;
+    height: 24px;
+
+    margin-top: 2px;
+
+    border-radius: 50%;
+
+    color: #ffffff;
+    background: #2e90fa;
+
+    font-family: Georgia, serif;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+/* -------------------------
+   Django message list
+   ------------------------- */
+
+ul.messagelist {
+    margin: 0 0 20px !important;
+    padding: 0 !important;
+}
+
+ul.messagelist li {
+    list-style: none !important;
+}
+
+/* -------------------------
+   Field-level errors
+   ------------------------- */
+
+.errorlist {
+    margin: 7px 0 4px !important;
+    padding: 0 !important;
+
+    list-style: none !important;
+
+    font-family: var(--admin-font-family) !important;
+    font-size: 15px !important;
+    line-height: 1.8 !important;
+
+    direction: rtl;
+    text-align: right;
+}
+
+.errorlist li {
+    margin: 4px 0 !important;
+    padding: 7px 10px !important;
+
+    border-radius: 6px;
+
+    color: #ffb4ab !important;
+    background: rgba(217, 45, 32, 0.08) !important;
+}
+
+/* Invalid form controls */
+
+.errors input,
+.errors select,
+.errors textarea,
+input[aria-invalid="true"],
+select[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+    border-color: #d92d20 !important;
+
+    box-shadow:
+        0 0 0 2px rgba(217, 45, 32, 0.12) !important;
+}
