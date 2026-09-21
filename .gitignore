@@ -239,3 +239,14 @@ db.sqlite3.*
 *.sqlite3.bak
 # Local source-code backups
 apps/core/management/commands/seed_demo_data.py.bak
+# Django collected static files
+staticfiles/
+
+
+# Local backup files
+*.bak
+*.bak-*
+
+# Debug files
+*_debug.html
+admin_*_page.html

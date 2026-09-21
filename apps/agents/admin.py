@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import admin, messages
 from django.utils import timezone
 
@@ -5,11 +6,26 @@ from .models import Agent
 
 from apps.core.admin_fields import RubikaAdminMixin
 
+class AgentAdminForm(forms.ModelForm):
+
+    class Meta:
+        model = Agent
+        fields = "__all__"
+
+    def clean_rubika_url(self):
+        value = self.cleaned_data.get("rubika_url")
+
+        if value and not value.startswith("http"):
+            value = f"https://rubika.ir/{value}"
+
+        return value
+
 @admin.register(Agent)
 class AgentAdmin(
     RubikaAdminMixin,
     admin.ModelAdmin,
 ):
+    form = AgentAdminForm
     list_display = (
         "full_name",
         "job_title",

@@ -442,3 +442,51 @@ select optgroup,
 .select2-search__field {
     font-size: 18px !important;
 }
+/* =========================================================
+   Existing File Text in Django Admin
+   ========================================================= */
+
+p.file-upload {
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    line-height: 1.8 !important;
+}
+
+p.file-upload a {
+    font-size: 18px !important;
+    font-weight: 700 !important;
+}
+/* =========================================================
+   Existing uploaded file text in Django Admin
+   ========================================================= */
+
+.aligned p.file-upload,
+.form-row p.file-upload,
+.inline-group p.file-upload {
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    line-height: 1.9 !important;
+}
+
+.aligned p.file-upload a,
+.form-row p.file-upload a,
+.inline-group p.file-upload a {
+    font-size: 18px !important;
+    font-weight: 700 !important;
+}
+/* =========================================================
+   Existing Uploaded File Text
+   ========================================================= */
+
+.file-upload {
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    line-height: 1.8 !important;
+    color: #ffffff !important;
+}
+
+.file-upload a {
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    color: #ffffff !important;
+}

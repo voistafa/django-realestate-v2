@@ -1,14 +1,30 @@
+from django import forms
 from django.contrib import admin
 
 from .models import OrganizationMember
 
 from apps.core.admin_fields import RubikaAdminMixin
 
+class OrganizationMemberAdminForm(forms.ModelForm):
+
+    class Meta:
+        model = OrganizationMember
+        fields = "__all__"
+
+    def clean_rubika_url(self):
+        value = self.cleaned_data.get("rubika_url")
+
+        if value and not value.startswith("http"):
+            value = f"https://rubika.ir/{value}"
+
+        return value
+
 @admin.register(OrganizationMember)
 class OrganizationMemberAdmin(
     RubikaAdminMixin,
     admin.ModelAdmin,
 ):
+    form = OrganizationMemberAdminForm
     list_display = (
         "full_name",
         "job_title",

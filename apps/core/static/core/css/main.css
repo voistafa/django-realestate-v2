@@ -190,7 +190,7 @@ main {
     align-items: center;
     min-height: 82px;
     color: #435248;
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 700;
     white-space: nowrap;
     transition: color 0.2s ease;
@@ -226,7 +226,7 @@ main {
     border-radius: 11px;
     background: var(--color-forest-900);
     color: var(--color-white);
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 800;
     white-space: nowrap;
     transition:
@@ -256,11 +256,11 @@ main {
     padding: 80px 0 74px;
     overflow: hidden;
     background-image:
-        linear-gradient(
-            rgba(14, 38, 26, 0.58),
-            rgba(14, 38, 26, 0.58)
-        ),
-        url("../images/hero-kelardasht.jpg");
+    linear-gradient(
+        rgba(14, 38, 26, 0.30),
+        rgba(14, 38, 26, 0.30)
+    ),
+    url("../images/hero-kelardasht.jpg");
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -602,6 +602,13 @@ main {
     gap: 24px;
 }
 
+/* Single featured property alignment */
+
+.property-grid:has(.property-card:only-child) {
+    grid-template-columns: minmax(320px, 460px);
+    justify-content: center;
+}
+
 .property-card {
     overflow: hidden;
     border: 1px solid var(--color-sage-200);
@@ -828,11 +835,14 @@ main {
 
 .agent-grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 22px;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 24px;
 }
 
 .agent-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
     overflow: hidden;
     border: 1px solid var(--color-sage-200);
     border-radius: var(--border-radius-medium);
@@ -852,7 +862,7 @@ main {
 }
 
 .agent-photo {
-    aspect-ratio: 1 / 0.88;
+    aspect-ratio: 1 / 1.15;
     overflow: hidden;
     background: var(--color-sage-100);
 }
@@ -881,7 +891,14 @@ main {
 }
 
 .agent-card-content {
-    padding: 22px 18px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 24px 18px;
+}
+
+.agent-card-content h3 {
+    margin: 0;
 }
 
 .agent-job-title {
@@ -892,11 +909,23 @@ main {
     font-weight: 700;
 }
 
+.agent-card-content p {
+    margin-top: 14px;
+    line-height: 1.9;
+}
+
+.agent-specialties {
+    margin-top: 12px;
+    color: var(--color-text-muted);
+    font-size: 13px;
+    line-height: 1.8;
+}
+
 .agent-meta {
     display: flex;
     flex-direction: column;
     gap: 9px;
-    margin-top: 18px;
+    margin-top: auto;
     padding-top: 16px;
     border-top: 1px solid var(--color-sage-100);
     color: var(--color-text-muted);
@@ -1068,15 +1097,7 @@ main {
 }
 
 
-/* =========================
-   Footer
-========================= */
 
-footer {
-    border-top: 4px solid var(--color-terracotta);
-    background: var(--color-forest-950);
-    color: var(--color-white);
-}
 
 
 /* =========================
@@ -1089,7 +1110,7 @@ footer {
     }
 
     .main-navigation a {
-        font-size: 15px;
+        font-size: 16px;
     }
 
     .site-logo-image {
@@ -1282,4 +1303,473 @@ footer {
         flex-direction: column;
         gap: 8px;
     }
+}
+/* =========================
+   Primary Manager Section
+========================= */
+
+.section-manager {
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(23,107,50,0.08),
+            transparent 40%
+        );
+}
+
+.manager-card {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 50px;
+    align-items: center;
+    padding: 55px;
+    background: var(--color-white);
+    border: 1px solid var(--color-sage-200);
+    border-radius: 32px;
+    box-shadow: var(--shadow-medium);
+}
+
+.manager-photo {
+    width: 280px;
+    height: 280px;
+    overflow: hidden;
+    border-radius: 50%;
+    background: var(--color-sage-100);
+    border: 8px solid var(--color-sage-100);
+}
+
+.manager-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.manager-photo-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    font-size: 90px;
+    font-weight: 800;
+    color: var(--color-forest-700);
+}
+
+.manager-content h3 {
+    margin: 0;
+    font-size: 36px;
+    color: var(--color-forest-900);
+}
+
+.manager-job-title {
+    display: block;
+    margin-top: 10px;
+    color: var(--color-forest-700);
+    font-weight: 800;
+    font-size: 17px;
+}
+
+.manager-content p {
+    margin-top: 25px;
+    max-width: 650px;
+    line-height: 2.1;
+    color: var(--color-text-muted);
+    font-size: 17px;
+}
+
+.manager-contact {
+    display: flex;
+    gap: 15px;
+    margin-top: 35px;
+}
+
+.manager-contact a {
+    padding: 13px 26px;
+    border-radius: 999px;
+    background: var(--color-forest-700);
+    color: white;
+    font-weight: 700;
+}
+
+
+@media (max-width: 768px) {
+
+    .manager-card {
+        grid-template-columns: 1fr;
+        padding: 30px;
+        text-align: center;
+    }
+
+    .manager-photo {
+        width: 190px;
+        height: 190px;
+        margin-inline: auto;
+    }
+
+    .manager-content p {
+        margin-inline: auto;
+    }
+
+    .manager-contact {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+}
+/* =========================
+   Footer Base
+========================= */
+
+.site-footer {
+
+    position: relative;
+
+    overflow: hidden;
+
+}
+
+
+/* تصویر کامل فوتر */
+
+.footer-bg-image {
+
+    width: 100%;
+
+    height: auto;
+
+    display: block;
+
+}
+
+
+/* محتوای روی تصویر */
+
+.footer-overlay {
+
+    position: absolute;
+
+    left: 0;
+
+    right: 0;
+
+    bottom: -50px;
+
+    z-index: 1;
+
+    padding: 0 0 70px;
+
+}
+
+
+.footer-overlay,
+.footer-overlay p,
+.footer-overlay a,
+.footer-overlay h4 {
+
+    color: #ffffff;
+
+    font-weight: 100;
+
+    font-size: 18px;
+
+}
+
+
+.footer-content {
+
+    display: grid;
+
+    grid-template-columns: max-content max-content;
+
+    justify-content: center;
+
+    grid-template-areas:
+        "brand brand"
+        "links contact";
+
+    row-gap: 48px;
+
+    column-gap: 80px;
+
+    align-items: start;
+
+    transform: translateY(-18px);
+
+}
+
+
+.footer-brand {
+
+    grid-area: brand;
+
+    justify-self: center;
+
+}
+
+
+.footer-links {
+
+    grid-area: links;
+
+    justify-self: start;
+
+    align-items: center;
+
+}
+
+
+.footer-contact {
+
+    grid-area: contact;
+
+    justify-self: end;
+
+    text-align: center;
+
+}
+
+
+/* =========================================================
+   Footer Logo — IMPORTANT
+
+   مشکل قبلی:
+   لوگوی Footer از کلاس عمومی .site-logo-image هدر استفاده می‌کرد.
+   آن کلاس کادر ثابت 190x64 همراه با object-fit: contain داشت،
+   درحالی‌که نسبت ابعاد فایل اصلی logo.png متفاوت بود و خود فایل
+   نیز در دو سمت دارای حاشیه سفید بود.
+
+   نتیجه:
+   خود عنصر ظاهراً در جای درست قرار داشت، اما نقش قابل‌مشاهده لوگو
+   حدود 50px از لبه راست عقب می‌افتاد. به همین دلیل تغییر margin
+   یا transform روی .footer-logo مشکل را اصولی حل نمی‌کرد.
+
+   اصلاح نهایی:
+   - فایل مستقل logo-footer.png از لوگوی اصلی ساخته شد.
+   - حاشیه سفید افقی فایل حذف شد (500x270 -> 380x270).
+   - کلاس .site-logo-image از لوگوی Footer حذف شد.
+   - width/height ثابت از HTML لوگوی Footer حذف شد.
+   - Footer اکنون فقط از .footer-logo با height ثابت و width:auto
+     استفاده می‌کند.
+
+   مهم:
+   کلاس .site-logo-image یا کادر ثابت 190x64 را دوباره به لوگوی
+   Footer اضافه نکن؛ در غیر این صورت همان مشکل تراز برمی‌گردد.
+========================================================= */
+
+
+.footer-logo {
+
+    display: block;
+
+    width: auto;
+
+    height: 64px;
+
+    max-width: none;
+
+    margin: 0;
+
+}
+
+
+.footer-brand {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 24px;
+
+}
+
+
+.footer-brand p {
+
+    margin: 0;
+
+    white-space: nowrap;
+
+    transform: none;
+
+}
+
+
+.footer-links {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 8px;
+
+}
+
+
+.footer-links h4,
+.footer-contact h4 {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 0 0 12px;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.footer-links h4::before,
+.footer-contact h4::before {
+    content: "";
+    width: 16px;
+    height: 2px;
+    flex-shrink: 0;
+    border-radius: 999px;
+    background: var(--color-terracotta);
+}
+
+
+.footer-link-item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    min-height: 40px;
+
+    padding: 7px 10px;
+
+    border: 1px solid rgba(255, 255, 255, 0.14);
+
+    border-radius: 10px;
+
+    background: rgba(255, 255, 255, 0.07);
+
+    backdrop-filter: blur(4px);
+
+}
+
+
+.footer-link-icon {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex: 0 0 30px;
+
+    width: 30px;
+
+    height: 30px;
+
+    border-radius: 8px;
+
+    background: rgba(255, 255, 255, 0.10);
+
+}
+
+
+.footer-link-icon svg {
+
+    width: 18px;
+
+    height: 18px;
+
+    fill: none;
+
+    stroke: currentColor;
+
+    stroke-width: 1.8;
+
+    stroke-linecap: round;
+
+    stroke-linejoin: round;
+
+}
+
+
+.footer-bottom {
+
+    margin-top: 40px;
+
+    padding-top: 20px;
+
+    border-top: 1px solid rgba(255,255,255,0.4);
+
+    text-align: center;
+
+}
+
+.footer-bottom p {
+    color: white;
+    font-size: 15px;
+    font-weight: 400;
+}
+/* =========================
+   Featured Property Final Layout
+========================= */
+
+#properties .property-grid {
+    display: flex;
+    justify-content: center;
+}
+
+#properties .property-card {
+    width: 720px;
+    max-width: 100%;
+}
+
+#properties .property-card-media {
+    aspect-ratio: 16 / 9;
+}
+
+#properties .property-card-content {
+    padding: 30px;
+}
+
+#properties .property-card h3 {
+    font-size: 26px;
+}
+
+#properties .property-card-content > p {
+    font-size: 16px;
+}
+
+#properties .property-specifications span {
+    font-size: 13px;
+}
+
+#properties .section-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 32px;
+}
+
+#properties .section-actions .button {
+    min-width: 220px;
+    justify-content: center;
+}
+
+/* فقط بخش چرا کلارخانه */
+#trust .section-heading {
+    grid-template-columns: 1fr;
+    gap: 18px;
+}
+
+#trust .section-heading > div {
+    max-width: none;
+}
+
+#trust .section-heading h2 {
+    white-space: nowrap;
+}
+
+#trust .section-heading p {
+    max-width: 700px;
+}
+
+#trust .section-heading {
+    background: red !important;
 }

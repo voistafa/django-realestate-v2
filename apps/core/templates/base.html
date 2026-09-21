@@ -1,4 +1,5 @@
 {% load static %}
+{% load persian_numbers %}
 
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
@@ -42,7 +43,7 @@
 
     <link
         rel="stylesheet"
-        href="{% static 'core/css/main.css' %}?v=20260802-6"
+        href="{% static 'core/css/main.css' %}?v=999999"
     >
 
 
@@ -62,12 +63,89 @@
         {% endblock %}
     </main>
 
+    <footer class="site-footer">
 
-    <footer>
-        {% block footer %}
-        {% endblock %}
-    </footer>
+    <img
+        class="footer-bg-image"
+        src="{% static 'core/images/footer-bg.jpg' %}"
+        alt="نمای کلاردشت"
+    >
 
+    <div class="footer-overlay">
+
+        <div class="container footer-content">
+
+            <div class="footer-brand">
+
+                <img
+                    class="footer-logo"
+                    src="{% static 'core/images/logo-footer.png' %}"
+                    alt="لوگوی کلارخانه"
+                >
+
+                <p>
+    انتخاب مطمئن شما برای خرید، فروش و سرمایه‌گذاری در کلاردشت.
+                </p>
+
+            </div>
+
+            <div class="footer-links">
+
+                <h4>دسترسی سریع</h4>
+
+                <a href="{% url 'core:home' %}">
+                    صفحه اصلی
+                </a>
+
+                <a href="{% url 'properties:list' %}">
+                    املاک
+                </a>
+
+                <a href="{% url 'projects:list' %}">
+                    پروژه‌ها
+                </a>
+
+                <a href="{% url 'core:home' %}#agents">
+                    مشاوران
+                </a>
+
+                <a href="{% url 'core:home' %}#about">
+                    درباره ما
+                </a>
+
+                <a href="{% url 'core:home' %}#contact">
+                    تماس با ما
+                </a>
+
+            </div>
+
+            <div class="footer-contact">
+
+                <h4>ارتباط با ما</h4>
+
+                {% if primary_manager and primary_manager.phone %}
+    <p>
+        <bdi dir="ltr">{{ primary_manager.phone|fa_digits }}</bdi>
+    </p>
+                {% endif %}
+
+                <p>مازندران - کلاردشت</p>
+
+            </div>
+
+        </div>
+
+        <div class="container footer-bottom">
+
+            <p>
+                © کلارخانه | تمامی حقوق محفوظ است؛ این وبسایت به مصطفی برارپور تعلق دارد.
+            </p>
+
+        </div>
+
+    </div>
+
+</footer>
 
     <script
         src="{% static 'core/js/navigation.js' %}?v=20260802-6"

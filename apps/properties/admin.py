@@ -521,8 +521,8 @@ class PropertyAdmin(admin.ModelAdmin):
         return format_html(
             (
                 '<img src="{}" alt="" '
-                'style="width:56px;height:42px;'
-                'object-fit:cover;border-radius:6px;">'
+                'style="width:90px;height:65px;'
+                'object-fit:cover;border-radius:8px;">'
             ),
             image.image.url,
         )
@@ -856,7 +856,15 @@ class PropertyAdmin(admin.ModelAdmin):
 
 @admin.register(PropertyImage)
 class PropertyImageAdmin(admin.ModelAdmin):
+
     form = PropertyImageAdminForm
+
+    class Media:
+        css = {
+            "all": (
+                "core/css/admin_custom.css",
+            )
+        }
 
     list_display = (
         "property",

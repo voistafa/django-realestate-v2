@@ -2,6 +2,7 @@ from django.db.models import Prefetch
 from django.shortcuts import render
 
 from apps.agents.models import Agent
+from apps.organization.models import OrganizationMember
 from apps.projects.models import (
     DevelopmentProject,
     ProjectImage,
@@ -16,6 +17,7 @@ def home(request):
     """
     Display featured and publicly available content.
     """
+
     featured_properties = (
         Property.objects.filter(
             publication_status=Property.PublicationStatus.PUBLISHED,
@@ -89,13 +91,34 @@ def home(request):
         .order_by(
             "display_order",
             "full_name",
-        )[:4]
+        )[:5]
+    )
+
+    primary_manager = (
+        OrganizationMember.objects.filter(
+            is_primary_manager=True,
+            is_active=True,
+        )
+        .first()
+    )
+
+    organization_members = (
+        OrganizationMember.objects.filter(
+            is_active=True,
+            is_primary_manager=False,
+        )
+        .order_by(
+            "display_order",
+            "full_name",
+        )[:5]
     )
 
     context = {
         "featured_properties": featured_properties,
         "featured_projects": featured_projects,
         "featured_agents": featured_agents,
+        "primary_manager": primary_manager,
+        "organization_members": organization_members,
     }
 
     return render(
