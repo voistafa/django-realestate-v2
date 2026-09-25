@@ -14,3 +14,17 @@ def fa_digits(value):
     return str(value).translate(
         str.maketrans(ENGLISH_DIGITS, PERSIAN_DIGITS)
     )
+
+@register.filter
+def persian_price(value):
+    if value is None:
+        return ""
+
+    formatted = f"{int(value):,}"
+
+    return formatted.translate(
+        str.maketrans(
+            "0123456789,",
+            "۰۱۲۳۴۵۶۷۸۹٬",
+        )
+    )

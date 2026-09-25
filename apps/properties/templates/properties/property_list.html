@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static humanize %}
+{% load static humanize persian_numbers %}
 
 
 {% block title %}
@@ -505,7 +505,7 @@
 
 
                     <p>
-                        {{ page_obj.paginator.count|intcomma }}
+                        {{ page_obj.paginator.count|fa_digits }}
                         فایل مطابق جست‌وجوی شما پیدا شد.
                     </p>
 
@@ -609,7 +609,7 @@
 
                                             <span>
                                                 زمین:
-                                                {{ property.land_area|intcomma }}
+                                                {{ property.land_area|persian_price }}
                                                 متر
                                             </span>
 
@@ -620,7 +620,7 @@
 
                                             <span>
                                                 بنا:
-                                                {{ property.building_area|intcomma }}
+                                                {{ property.building_area|persian_price }}
                                                 متر
                                             </span>
 
@@ -630,7 +630,7 @@
                                         {% if property.bedrooms %}
 
                                             <span>
-                                                {{ property.bedrooms|intcomma }}
+                                                {{ property.bedrooms|persian_price }}
                                                 خواب
                                             </span>
 
@@ -640,7 +640,7 @@
                                         {% if property.bathrooms %}
 
                                             <span>
-                                                {{ property.bathrooms|intcomma }}
+                                                {{ property.bathrooms|fa_digits }}
                                                 سرویس
                                             </span>
 
@@ -650,7 +650,7 @@
                                         {% if property.parking_spaces %}
 
                                             <span>
-                                                {{ property.parking_spaces|intcomma }}
+                                                {{ property.parking_spaces|fa_digits }}
                                                 پارکینگ
                                             </span>
 
@@ -708,7 +708,7 @@
 
                                                     {% if property.sale_price %}
 
-                                                        {{ property.sale_price|intcomma }}
+                                                        {{ property.sale_price|persian_price }}
 
                                                         {% if property.currency_code == "IRT" %}
                                                             تومان
@@ -988,8 +988,8 @@
 {% block extra_js %}
 
     <script
-        src="{% static 'properties/js/property-list.js' %}"
-        defer
-    ></script>
+    src="{% static 'properties/js/property-list.js' %}?v=2"
+    defer
+></script>
 
 {% endblock %}

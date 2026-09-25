@@ -51,6 +51,9 @@ def project_list(request):
     context = {
         "page_obj": page_obj,
         "projects": page_obj.object_list,
+        "primary_manager": {
+            "phone": "+989309932199",
+        },
     }
 
     return render(

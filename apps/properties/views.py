@@ -23,6 +23,8 @@ from .models import (
     PropertyType,
 )
 
+from apps.agents.models import Agent
+
 
 PUBLIC_AVAILABILITY_STATUSES = (
     Property.AvailabilityStatus.AVAILABLE,
@@ -360,14 +362,17 @@ def property_list(request):
     query_string = query_parameters.urlencode()
 
     context = {
-        "page_obj": page_obj,
-        "properties": page_obj.object_list,
-        "property_types": PropertyType.objects.filter(
-            is_active=True,
-        ).order_by(
-            "display_order",
-            "name",
-        ),
+    "page_obj": page_obj,
+    "properties": page_obj.object_list,
+    "primary_manager": {
+        "phone": "+989309932199",
+    },
+    "property_types": PropertyType.objects.filter(
+        is_active=True,
+    ).order_by(
+        "display_order",
+        "name",
+    ),
         "regions": Region.objects.select_related(
             "city",
         ).order_by(

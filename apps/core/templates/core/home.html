@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load humanize %}
 
+{% load persian_numbers %}
 
 {% block title %}
 کلارخانه | خرید، فروش و سرمایه‌گذاری ملکی در کلاردشت
@@ -107,19 +108,19 @@
                         <div class="property-specifications">
                             {% if property.building_area %}
                                 <span>
-                                    {{ property.building_area|intcomma }} متر بنا
+                                    {{ property.building_area|intcomma|fa_digits }} متر بنا
                                 </span>
                             {% endif %}
 
                             {% if property.land_area %}
                                 <span>
-                                    {{ property.land_area|intcomma }} متر زمین
+                                    {{ property.land_area|intcomma|fa_digits }} متر زمین
                                 </span>
                             {% endif %}
 
                             {% if property.bedrooms %}
                                 <span>
-                                    {{ property.bedrooms }} خواب
+                                    {{ property.bedrooms|fa_digits }} خواب
                                 </span>
                             {% endif %}
                         </div>
@@ -131,7 +132,7 @@
 
                                 {% elif property.transaction_type == "sale" or property.transaction_type == "pre_sale" %}
                                     {% if property.sale_price %}
-                                        {{ property.sale_price|intcomma }}
+                                        {{ property.sale_price|persian_price }}
 
                                         {% if property.currency_code == "IRT" %}
                                             تومان
@@ -316,7 +317,7 @@
                                 </span>
 
                                 <strong>
-                                    {{ project.completion_percentage }}٪
+                                    {{ project.completion_percentage|fa_digits }}٪
                                 </strong>
                             </div>
 
@@ -336,7 +337,7 @@
                             {% elif project.starting_price %}
                                 <strong>
                                     شروع قیمت از
-                                    {{ project.starting_price|intcomma }}
+                                    {{ project.starting_price|intcomma|fa_digits }}
 
                                     {% if project.currency_code == "IRT" %}
                                         تومان
@@ -529,7 +530,7 @@
 
                         <div class="agent-meta">
                             <span>
-                                {{ agent.experience_years }} سال تجربه
+                                {{ agent.experience_years|fa_digits }} سال تجربه
                             </span>
 
                             {% if agent.phone %}

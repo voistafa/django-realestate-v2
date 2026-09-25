@@ -7,8 +7,63 @@ const customSelectInstances = [];
 document.addEventListener("DOMContentLoaded", () => {
     initializePriceInputs();
     initializeCustomSelects();
+    initializeSearchInput();
+    initializePlaceholderDigits();
 });
 
+function initializePlaceholderDigits() {
+    const inputs = document.querySelectorAll(
+        ".js-price-input",
+    );
+
+    inputs.forEach((input) => {
+        if (input.placeholder) {
+            input.placeholder = toPersianDigits(
+                input.placeholder,
+            );
+        }
+    });
+}
+
+function initializeSearchInput() {
+    const searchInput = document.querySelector(
+        "#property-search",
+    );
+
+    if (!searchInput) {
+        return;
+    }
+
+    const convertSearchDigits = () => {
+    const before = searchInput.value;
+
+    const after = toPersianDigits(
+        searchInput.value,
+    );
+
+    console.log("BEFORE:", before);
+    console.log("AFTER:", after);
+
+    searchInput.value = after;
+};
+
+    convertSearchDigits();
+
+    searchInput.addEventListener(
+        "input",
+        convertSearchDigits,
+    );
+
+    searchInput.addEventListener(
+        "change",
+        convertSearchDigits,
+    );
+
+    searchInput.addEventListener(
+        "keyup",
+        convertSearchDigits,
+    );
+}
 
 /* ==================================================
    Price Inputs
@@ -65,37 +120,58 @@ function formatPriceValue(value) {
 }
 
 
+function toPersianDigits(value) {
+    const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
+
+    return String(value).replace(
+        /\d/g,
+        (digit) => persianDigits[digit],
+    );
+}
+
+
 function initializePriceInputs() {
     const priceInputs = document.querySelectorAll(
         ".js-price-input",
     );
 
     priceInputs.forEach((input) => {
-        input.value = formatPriceValue(input.value);
+        if (input.placeholder) {
+            input.placeholder = toPersianDigits(
+                input.placeholder,
+            );
+        }
+    });
+
+    priceInputs.forEach((input) => {
+        input.value = toPersianDigits(
+            formatPriceValue(input.value),
+        );
 
         input.addEventListener("input", () => {
             const formattedValue = formatPriceValue(
                 input.value,
             );
 
-            input.value = formattedValue;
+            input.value = toPersianDigits(
+                formattedValue,
+            );
         });
 
         input.addEventListener("paste", () => {
             window.setTimeout(() => {
-                input.value = formatPriceValue(
-                    input.value,
+                input.value = toPersianDigits(
+                    formatPriceValue(input.value),
                 );
             }, 0);
         });
 
         input.addEventListener("blur", () => {
-            input.value = formatPriceValue(
-                input.value,
+            input.value = toPersianDigits(
+                formatPriceValue(input.value),
             );
         });
     });
-
 
     document
         .querySelectorAll(".property-filter-form")

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static humanize %}
+{% load static humanize persian_numbers %}
 
 
 {% block title %}
@@ -97,7 +97,7 @@
                                 </span>
 
                                 <strong>
-                                    {{ project.completion_percentage }}٪
+                                    {{ project.completion_percentage|fa_digits }}٪
                                 </strong>
                             </div>
 
@@ -122,7 +122,7 @@
 
                                 <strong>
                                     شروع قیمت از
-                                    {{ project.starting_price|intcomma }}
+                                    {{ project.starting_price|persian_price }}
 
                                     {% if project.currency_code == "IRT" %}
                                         تومان

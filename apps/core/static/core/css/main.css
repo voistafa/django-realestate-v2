@@ -1752,24 +1752,3 @@ main {
     justify-content: center;
 }
 
-/* فقط بخش چرا کلارخانه */
-#trust .section-heading {
-    grid-template-columns: 1fr;
-    gap: 18px;
-}
-
-#trust .section-heading > div {
-    max-width: none;
-}
-
-#trust .section-heading h2 {
-    white-space: nowrap;
-}
-
-#trust .section-heading p {
-    max-width: 700px;
-}
-
-#trust .section-heading {
-    background: red !important;
-}

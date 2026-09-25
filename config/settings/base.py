@@ -154,6 +154,7 @@ USE_I18N = True
 
 USE_TZ = True
 
+NUMBER_GROUPING = 3
 
 # Date and time formats
 
