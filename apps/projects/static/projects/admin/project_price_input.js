@@ -1,6 +1,8 @@
 (function () {
     "use strict";
 
+    console.log("project_price_input loaded");
+
     function start() {
         const input = document.getElementById("id_starting_price");
 
@@ -8,44 +10,53 @@
             return;
         }
 
-        const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
-        const arabicDigits = "٠١٢٣٤٥٦٧٨٩";
-
-        function toLatinDigits(value) {
+        function toEnglishDigits(value) {
             return String(value)
                 .replace(/[۰-۹]/g, function (digit) {
-                    return String(persianDigits.indexOf(digit));
+                    return "0123456789"["۰۱۲۳۴۵۶۷۸۹".indexOf(digit)];
                 })
                 .replace(/[٠-٩]/g, function (digit) {
-                    return String(arabicDigits.indexOf(digit));
+                    return "0123456789"["٠١٢٣٤٥٦٧٨٩".indexOf(digit)];
                 });
         }
 
-        function getDigits(value) {
-            return toLatinDigits(value)
-                .replace(/[^0-9]/g, "")
-                .slice(0, 20);
+
+        function toPersianDigits(value) {
+            return String(value).replace(/[0-9]/g, function (digit) {
+                return "۰۱۲۳۴۵۶۷۸۹"[digit];
+            });
         }
 
-        function formatPrice(value) {
-            const digits = getDigits(value);
 
-            if (!digits) {
+        function formatPrice(value) {
+            let number = toEnglishDigits(value);
+
+            number = number.replace(/,/g, "");
+
+            number = number.replace(/[^0-9]/g, "");
+
+            if (!number) {
                 return "";
             }
 
-            return digits.replace(
-                /\B(?=(\d{3})+(?!\d))/g,
-                "٬"
+            number = Number(number).toLocaleString("en-US");
+
+            return toPersianDigits(number);
+        }
+
+
+        function rawValue(value) {
+            return toEnglishDigits(
+                value.replace(/,/g, "")
             );
         }
 
+
         input.type = "text";
         input.inputMode = "numeric";
-        input.autocomplete = "off";
-        input.dir = "ltr";
 
         input.value = formatPrice(input.value);
+
 
         input.addEventListener("input", function () {
             input.value = formatPrice(input.value);
@@ -56,14 +67,16 @@
             );
         });
 
+
         const form = input.closest("form");
 
         if (form) {
             form.addEventListener("submit", function () {
-                input.value = getDigits(input.value);
+                input.value = rawValue(input.value);
             });
         }
     }
+
 
     if (document.readyState === "loading") {
         document.addEventListener(
@@ -74,4 +87,5 @@
     } else {
         start();
     }
-}());
+
+})();
