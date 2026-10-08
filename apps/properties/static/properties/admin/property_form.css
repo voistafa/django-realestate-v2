@@ -32,3 +32,13 @@ body.app-properties.model-property.change-form
     width: auto;
     max-width: none;
 }
+
+/* System dates size refinement */
+
+body.app-properties.model-property.change-form
+.form-row.field-created_at .readonly,
+body.app-properties.model-property.change-form
+.form-row.field-updated_at .readonly {
+    font-size: 16px !important;
+    line-height: 1.6;
+}
