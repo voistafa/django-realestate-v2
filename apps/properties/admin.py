@@ -1,12 +1,14 @@
 from django import forms
 from django.contrib import admin, messages
 from django.core.exceptions import ValidationError
+from django.db import models
 from django.db.models import Prefetch, Q
 from django.forms.models import BaseInlineFormSet
 from django.utils import timezone
 from django.utils.html import format_html
 
 from apps.agents.models import Agent
+from apps.core.admin import BaseAdmin
 
 from .models import (
     Feature,
@@ -16,9 +18,84 @@ from .models import (
     PropertyType,
 )
 
+def to_persian_price(value):
+    return f"{int(value):,}".translate(
+        str.maketrans(
+            "0123456789,",
+            "۰۱۲۳۴۵۶۷۸۹٬",
+        )
+    )
+
+
+class PriceFormatMixin:
+    def format_value(self, value):
+        if value:
+            return f"{int(value):,}"
+        return value
+
+class PriceInput(forms.TextInput):
+    input_type = "text"
+
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault(
+            "attrs",
+            {}
+        )
+
+        kwargs["attrs"]["class"] = (
+            kwargs["attrs"].get("class", "")
+            + " price-field"
+        ).strip()
+
+        super().__init__(*args, **kwargs)
+
+class PersianNumberInput(forms.TextInput):
+    input_type = "text"
+
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault(
+            "attrs",
+            {}
+        )
+
+        kwargs["attrs"]["inputmode"] = "numeric"
+        kwargs["attrs"]["class"] = (
+            kwargs["attrs"].get("class", "")
+            + " persian-number-field"
+        ).strip()
+
+        super().__init__(*args, **kwargs)
+
+class PropertyAdminForm(forms.ModelForm):
+
+    class Meta:
+        model = Property
+        fields = "__all__"
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field_name in (
+            "sale_price",
+            "deposit_amount",
+            "monthly_rent",
+):
+            if field_name in self.fields:
+                self.fields[field_name].widget = PriceInput()
+            
+
+            for field_name in (
+                "bedrooms",
+                "bathrooms",
+                "parking_spaces",
+            ):
+                if field_name in self.fields:
+                    self.fields[field_name].widget = PersianNumberInput()
+
 
 @admin.register(PropertyType)
-class PropertyTypeAdmin(admin.ModelAdmin):
+class PropertyTypeAdmin(BaseAdmin):
     list_display = (
         "name",
         "slug",
@@ -49,7 +126,7 @@ class PropertyTypeAdmin(admin.ModelAdmin):
 
 
 @admin.register(Feature)
-class FeatureAdmin(admin.ModelAdmin):
+class FeatureAdmin(BaseAdmin):
     list_display = (
         "name",
         "icon",
@@ -153,6 +230,18 @@ class PropertyImageInline(admin.TabularInline):
     formset = PropertyImageInlineFormSet
     extra = 1
 
+    class Media:
+        js = (
+        "core/admin/admin_file_input.js",
+        "core/admin/admin_global.js",
+    )
+
+    formfield_overrides = {
+        models.ImageField: {
+            "widget": admin.widgets.AdminFileWidget,
+        },
+    }
+
     fields = (
         "image",
         "alt_text",
@@ -194,7 +283,8 @@ class PropertyPrivateDetailsInline(admin.StackedInline):
 
 
 @admin.register(Property)
-class PropertyAdmin(admin.ModelAdmin):
+class PropertyAdmin(BaseAdmin):
+    form = PropertyAdminForm
     list_display = (
         "cover_thumbnail",
         "reference_code",
@@ -435,6 +525,10 @@ class PropertyAdmin(admin.ModelAdmin):
             ),
         }
 
+        js = (
+            "properties/admin/price_format.js",
+        )
+
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
 
@@ -543,7 +637,7 @@ class PropertyAdmin(admin.ModelAdmin):
         ):
             if obj.sale_price is not None:
                 price_parts.append(
-                    f"{obj.sale_price:,.0f} {currency_label}"
+                    f"{to_persian_price(obj.sale_price)} {currency_label}"
                 )
 
         elif (
@@ -554,7 +648,7 @@ class PropertyAdmin(admin.ModelAdmin):
                 price_parts.append(
                     (
                         f"رهن کامل: "
-                        f"{obj.deposit_amount:,.0f} "
+                        f"{to_persian_price(obj.deposit_amount)} "
                         f"{currency_label}"
                     ),
                 )
@@ -573,7 +667,7 @@ class PropertyAdmin(admin.ModelAdmin):
                 price_parts.append(
                     (
                         f"اجاره: "
-                        f"{obj.monthly_rent:,.0f} "
+                        f"{to_persian_price(obj.monthly_rent)} "
                         f"{currency_label}"
                     ),
                 )
@@ -855,7 +949,7 @@ class PropertyAdmin(admin.ModelAdmin):
 
 
 @admin.register(PropertyImage)
-class PropertyImageAdmin(admin.ModelAdmin):
+class PropertyImageAdmin(BaseAdmin):
 
     form = PropertyImageAdminForm
 

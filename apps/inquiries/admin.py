@@ -1,10 +1,12 @@
 from django.contrib import admin
 
+from apps.core.admin import BaseAdmin
+
 from .models import Inquiry
 
 
 @admin.register(Inquiry)
-class InquiryAdmin(admin.ModelAdmin):
+class InquiryAdmin(BaseAdmin):
     list_display = (
         "full_name",
         "phone",

@@ -490,3 +490,23 @@ p.file-upload a {
     font-weight: 600 !important;
     color: #ffffff !important;
 }
+
+/* Hide Django admin selection counter */
+.action-counter {
+    display: none !important;
+}
+
+/* Global readonly fields refinement */
+
+.readonly,
+.form-row .readonly {
+    font-size: 18px !important;
+    line-height: 1.8 !important;
+}
+
+/* Global readonly fields size */
+
+body.change-form .readonly {
+    font-size: 16px !important;
+    line-height: 1.8 !important;
+}

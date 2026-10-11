@@ -1,0 +1,34 @@
+/* Django Admin FileField */
+
+.file-upload {
+    margin: 0 !important;
+    direction: rtl;
+}
+
+
+.file-upload .admin-file-input {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin-right: 0 !important;
+    padding: 0 !important;
+    vertical-align: middle !important;
+}
+
+
+.admin-file-input__button {
+    order: 2;
+    min-width: 90px !important;
+}
+
+
+.admin-file-input__name {
+    order: 1;
+    min-width: 120px !important;
+    white-space: nowrap !important;
+}
+
+
+.file-upload br {
+    display: none;
+}

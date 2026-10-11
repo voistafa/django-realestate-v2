@@ -42,3 +42,41 @@ body.app-properties.model-property.change-form
     font-size: 16px !important;
     line-height: 1.6;
 }
+
+/* Price checkbox alignment */
+
+body.app-properties.model-property.change-form
+.form-row.field-price_on_request.field-is_price_negotiable
+.form-multiline {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+body.app-properties.model-property.change-form
+.form-row.field-price_on_request.field-is_price_negotiable
+.fieldBox {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+/* Keep technical number fields in one line */
+
+body.app-properties.model-property.change-form
+.form-row.field-bedrooms.field-bathrooms.field-parking_spaces
+.form-multiline {
+    align-items: center;
+}
+
+body.app-properties.model-property.change-form
+.form-row.field-bedrooms.field-bathrooms.field-parking_spaces
+.fieldBox {
+    white-space: nowrap;
+}
+
+body.app-properties.model-property.change-form
+.form-row.field-bedrooms.field-bathrooms.field-parking_spaces
+label {
+    white-space: nowrap;
+}

@@ -254,23 +254,67 @@
         updateTrigger();
     }
 
-    function start() {
-        const selects = document.querySelectorAll(
-            '#changelist-form .actions select[name="action"]'
-        );
+    function convertAdminNumbersToPersian() {
+    const counter = document.querySelector(
+        ".action-counter"
+    );
 
-        selects.forEach(
-            initializeActionSelect
-        );
+    if (!counter) {
+        return;
     }
 
-    if (document.readyState === "loading") {
-        document.addEventListener(
-            "DOMContentLoaded",
-            start,
-            { once: true }
+    counter.textContent =
+        counter.textContent.replace(
+            /[0-9]/g,
+            function (digit) {
+                return "۰۱۲۳۴۵۶۷۸۹"[digit];
+            }
         );
-    } else {
-        start();
-    }
+}
+
+
+function hideActionCounter() {
+    document.querySelectorAll(".action-counter")
+        .forEach(function (el) {
+            el.remove();
+        });
+}
+
+
+function fixPhoneDirection() {
+    document.querySelectorAll("td, th")
+        .forEach(function (el) {
+            if (/\+98|09/.test(el.textContent)) {
+                el.style.direction = "ltr";
+                el.style.textAlign = "left";
+            }
+        });
+}
+
+function start() {
+    const selects = document.querySelectorAll(
+        '#changelist-form .actions select[name="action"]'
+    );
+
+    selects.forEach(
+        initializeActionSelect
+    );
+
+    hideActionCounter();
+    fixPhoneDirection();
+
+}
+
+
+if (document.readyState === "loading") {
+    document.addEventListener(
+        "DOMContentLoaded",
+        start,
+        { once: true }
+    );
+} else {
+    start();
+}
+
+
 }());

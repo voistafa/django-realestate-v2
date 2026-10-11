@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib import admin
 
+from apps.core.admin import BaseAdmin
 from .models import OrganizationMember
 
 from apps.core.admin_fields import RubikaAdminMixin
@@ -22,13 +23,17 @@ class OrganizationMemberAdminForm(forms.ModelForm):
 @admin.register(OrganizationMember)
 class OrganizationMemberAdmin(
     RubikaAdminMixin,
-    admin.ModelAdmin,
+    BaseAdmin,
 ):
     form = OrganizationMemberAdminForm
+
+    @admin.display(description="شماره تماس")
+    def phone_ltr(self, obj):
+        return f"\u200e{obj.phone}"
     list_display = (
         "full_name",
         "job_title",
-        "phone",
+        "phone_ltr",
         "is_primary_manager",
         "is_active",
         "display_order",

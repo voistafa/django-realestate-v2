@@ -1,0 +1,83 @@
+msgid ""
+msgstr ""
+"Language: fa\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+
+msgid "Django site admin"
+msgstr "مدیریت سایت"
+
+
+msgid "Django administration"
+msgstr "مدیریت کلارخانه"
+
+
+msgid "Browse"
+msgstr "انتخاب فایل"
+
+
+msgid "No file selected"
+msgstr "فایلی انتخاب نشده است"
+
+
+msgid "Currently"
+msgstr "در حال حاضر"
+
+
+msgid "Change"
+msgstr "تغییر"
+
+
+msgid "Clear"
+msgstr "پاک کردن"
+
+
+msgid "Save"
+msgstr "ذخیره"
+
+
+msgid "Save and continue editing"
+msgstr "ذخیره و ادامه ویرایش"
+
+
+msgid "Save and add another"
+msgstr "ذخیره و افزودن مورد جدید"
+
+
+msgid "Delete"
+msgstr "حذف"
+
+
+msgid "Created at"
+msgstr "تاریخ ایجاد"
+
+
+msgid "Updated at"
+msgstr "تاریخ بروزرسانی"
+
+
+msgid "History"
+msgstr "تاریخچه"
+
+
+msgid "View on site"
+msgstr "نمایش وبگاه"
+
+
+msgid "Password change"
+msgstr "تغییر گذرواژه"
+
+
+msgid "Log out"
+msgstr "خروج"
+
+
+msgid "0 of %(cnt)s selected"
+msgstr "۰ از %(cnt)s انتخاب شده است"
+
+
+msgid "%(sel)s of %(cnt)s selected"
+msgid_plural "%(sel)s of %(cnt)s selected"
+msgstr[0] "%(sel)s از %(cnt)s انتخاب شده است"
+msgstr[1] "%(sel)s از %(cnt)s انتخاب شده است"

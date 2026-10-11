@@ -12,6 +12,8 @@ from jalali_date.widgets import (
     AdminSplitJalaliDateTime,
 )
 
+from apps.core.admin import BaseAdmin
+
 from .models import (
     DevelopmentProject,
     ProjectFeature,
@@ -179,6 +181,12 @@ class DevelopmentProjectAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        if "starting_price" in self.fields:
+            self.fields["starting_price"].widget.attrs["class"] = (
+                self.fields["starting_price"].widget.attrs.get("class", "")
+                + " price-field"
+    )
+
         features_field = self.fields["features"]
         features_field.label = "امکانات پروژه"
 
@@ -284,7 +292,7 @@ class DevelopmentProjectAdminForm(forms.ModelForm):
 
 
 @admin.register(ProjectFeature)
-class ProjectFeatureAdmin(admin.ModelAdmin):
+class ProjectFeatureAdmin(BaseAdmin):
     list_display = (
         "name",
         "icon",
@@ -333,8 +341,18 @@ class ProjectImageInline(admin.TabularInline):
 
 
 @admin.register(DevelopmentProject)
-class DevelopmentProjectAdmin(admin.ModelAdmin):
+class DevelopmentProjectAdmin(BaseAdmin):
     form = DevelopmentProjectAdminForm
+
+    @admin.display(
+        description="قیمت شروع",
+        ordering="starting_price",
+    )
+    def starting_price_display(self, obj):
+        if obj.starting_price is None:
+            return "—"
+
+        return f"{obj.starting_price:,.0f}"
 
     list_display = (
         "reference_code",
@@ -343,7 +361,7 @@ class DevelopmentProjectAdmin(admin.ModelAdmin):
         "construction_status",
         "publication_status",
         "completion_percentage",
-        "starting_price",
+        "starting_price_display",
         "price_on_request",
         "currency_code",
         "is_featured",
@@ -720,7 +738,7 @@ class DevelopmentProjectAdmin(admin.ModelAdmin):
 
 
 @admin.register(ProjectImage)
-class ProjectImageAdmin(admin.ModelAdmin):
+class ProjectImageAdmin(BaseAdmin):
     list_display = (
         "project",
         "is_cover",

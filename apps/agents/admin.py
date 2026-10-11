@@ -4,6 +4,7 @@ from django.utils import timezone
 
 from .models import Agent
 
+from apps.core.admin import BaseAdmin
 from apps.core.admin_fields import RubikaAdminMixin
 
 class AgentAdminForm(forms.ModelForm):
@@ -23,7 +24,7 @@ class AgentAdminForm(forms.ModelForm):
 @admin.register(Agent)
 class AgentAdmin(
     RubikaAdminMixin,
-    admin.ModelAdmin,
+    BaseAdmin,
 ):
     form = AgentAdminForm
     list_display = (

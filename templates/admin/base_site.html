@@ -22,6 +22,12 @@
         rel="stylesheet"
         href="{% static 'core/admin/admin_feedback.css' %}"
     >
+
+<link
+    rel="stylesheet"
+    href="{% static 'core/admin/admin_file_input.css' %}"
+>
+
 {% endblock %}
 
 {% block extrahead %}
@@ -46,7 +52,32 @@
         src="{% static 'core/admin/admin_phone_digits.js' %}"
         defer
     ></script>
+
+    <script
+        src="{% static 'core/admin/admin_number_digits.js' %}"
+        defer
+    ></script>
+
+    <script
+        src="{% static 'core/admin/admin_digits.js' %}"
+        defer
+    ></script>
+
+    <script
+        src="{% static 'core/admin/admin_file_input.js' %}"
+        defer
+    ></script>
+
+    <!--
+    <script
+        src="{% static 'core/admin/admin_counter.js' %}"
+        defer
+    ></script>
+    -->
+
 {% endblock %}
+
+
 
 {% block branding %}
 <div id="site-name">

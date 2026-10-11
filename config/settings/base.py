@@ -148,9 +148,15 @@ LANGUAGES = [
     ("fa", "فارسی"),
 ]
 
+LOCALE_PATHS = [
+    BASE_DIR / "locale",
+]
+
 TIME_ZONE = "Asia/Tehran"
 
 USE_I18N = True
+
+USE_L10N = True
 
 USE_TZ = True
 
@@ -180,6 +186,7 @@ JALALI_DATE_DEFAULTS = {
         "date": "%Y/%m/%d",
         "datetime": "%Y/%m/%d - %H:%M",
     },
+    "StrftimeAutoConvert": True,
 }
 
 
